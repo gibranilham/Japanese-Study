@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FAFAF8">
+<title>日本語 — JLPT Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --surface2: #F4F3EF;
+    --border: #E8E6E0;
+    --text: #1A1A18;
+    --text2: #6B6860;
+    --text3: #A8A69E;
+    --accent: #2D5016;
+    --accent-light: #EBF2E3;
+    --accent2: #8B1A00;
+    --accent2-light: #FAEEE9;
+    --gold: #B8860B;
+    --gold-light: #FDF6E3;
+    --card-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    --card-shadow-lg: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --nav-h: 72px;
+    --font-jp: 'Noto Sans JP', sans-serif;
+    --font-serif: 'Noto Serif JP', serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: var(--font-jp);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; flex-direction: column; min-height: 100dvh; padding-bottom: var(--nav-h); animation: fadeIn 0.2s ease; }
+  .screen.active { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 56px 24px 20px;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); font-weight: 500; margin-bottom: 4px; }
+  .header-title { font-family: var(--font-serif); font-size: 26px; font-weight: 600; color: var(--text); line-height: 1.2; }
+  .header-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    height: var(--nav-h);
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 8px 16px; border-radius: 12px; cursor: pointer;
+    transition: background 0.15s; flex: 1; border: none; background: none;
+  }
+  .nav-item.active .nav-icon { color: var(--accent); }
+  .nav-item.active .nav-label { color: var(--accent); font-weight: 600; }
+  .nav-icon { font-size: 22px; color: var(--text3); transition: color 0.15s; }
+  .nav-label { font-size: 10px; color: var(--text3); letter-spacing: 0.04em; font-weight: 500; }
+
+  /* ── SCROLL CONTENT ── */
+  .scroll-content { flex: 1; overflow-y: auto; padding: 0 20px 24px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+  }
+  .card + .card { margin-top: 12px; }
+
+  /* ── DASHBOARD ── */
+  .streak-bar {
+    background: var(--gold-light);
+    border: 1px solid #E8D48A;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .streak-icon { font-size: 28px; }
+  .streak-num { font-family: var(--font-serif); font-size: 28px; font-weight: 600; color: var(--gold); line-height: 1; }
+  .streak-label { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    box-shadow: var(--card-shadow);
+  }
+  .stat-num { font-family: var(--font-serif); font-size: 28px; font-weight: 600; color: var(--text); line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--text2); margin-top: 4px; letter-spacing: 0.04em; }
+  .stat-sub { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  .progress-section { margin-bottom: 16px; }
+  .progress-label { font-size: 12px; color: var(--text2); margin-bottom: 8px; display: flex; justify-content: space-between; }
+  .progress-bar { height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+  .section-title { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); font-weight: 600; margin: 20px 0 10px; }
+
+  .action-btn {
+    width: 100%; padding: 16px 20px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--surface);
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+    box-shadow: var(--card-shadow); transition: all 0.15s; text-align: left;
+    margin-bottom: 10px;
+  }
+  .action-btn:active { transform: scale(0.98); background: var(--surface2); }
+  .action-btn-icon { font-size: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; flex-shrink: 0; }
+  .action-btn-text { flex: 1; }
+  .action-btn-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .action-btn-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .action-btn-arrow { color: var(--text3); font-size: 18px; }
+
+  .primary-btn {
+    width: 100%; padding: 18px; border-radius: var(--radius-sm);
+    background: var(--accent); color: white; border: none;
+    font-size: 16px; font-weight: 600; font-family: var(--font-jp);
+    cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em;
+    box-shadow: 0 4px 16px rgba(45,80,22,0.25);
+  }
+  .primary-btn:active { transform: scale(0.98); opacity: 0.9; }
+  .primary-btn:disabled { background: var(--text3); box-shadow: none; cursor: not-allowed; }
+
+  .secondary-btn {
+    width: 100%; padding: 16px; border-radius: var(--radius-sm);
+    background: var(--surface2); color: var(--text); border: 1px solid var(--border);
+    font-size: 15px; font-weight: 500; font-family: var(--font-jp);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .secondary-btn:active { transform: scale(0.98); }
+
+  /* ── FLASHCARD ── */
+  #flashcard-screen { background: var(--bg); }
+  .fc-header {
+    padding: 56px 24px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .fc-back-btn {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 18px; box-shadow: var(--card-shadow);
+  }
+  .fc-progress-text { font-size: 13px; color: var(--text2); flex: 1; text-align: center; }
+  .fc-mode-label { font-size: 12px; color: var(--text3); background: var(--surface2); padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border); }
+
+  .fc-progress-bar { height: 3px; background: var(--surface2); margin: 0 24px 24px; border-radius: 99px; }
+  .fc-progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; }
+
+  .fc-card-wrap {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 0 20px; perspective: 1200px;
+  }
+
+  .fc-card {
+    width: 100%; max-width: 400px;
+    min-height: 340px;
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .fc-card.flipped { transform: rotateY(180deg); }
+
+  .fc-face {
+    position: absolute; inset: 0;
+    background: var(--surface);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--card-shadow-lg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 32px 28px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .fc-back { transform: rotateY(180deg); }
+
+  .fc-hint { font-size: 11px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+  .fc-word { font-family: var(--font-serif); font-size: 52px; font-weight: 600; color: var(--text); text-align: center; line-height: 1.2; margin-bottom: 8px; }
+  .fc-furigana { font-size: 14px; color: var(--text2); text-align: center; margin-bottom: 4px; }
+  .fc-pos { font-size: 11px; color: var(--text3); background: var(--surface2); padding: 3px 10px; border-radius: 99px; letter-spacing: 0.06em; }
+
+  .fc-tap-hint { font-size: 12px; color: var(--text3); display: flex; align-items: center; gap: 4px; margin-top: 24px; }
+
+  /* back face */
+  .fc-meaning { font-size: 22px; font-weight: 600; color: var(--text); text-align: center; margin-bottom: 16px; }
+  .fc-example { background: var(--surface2); border-radius: 10px; padding: 14px 16px; width: 100%; margin-bottom: 12px; }
+  .fc-example-jp { font-size: 15px; color: var(--text); line-height: 1.6; margin-bottom: 6px; }
+  .fc-example-en { font-size: 13px; color: var(--text2); line-height: 1.4; }
+  .fc-tip { font-size: 12px; color: var(--gold); background: var(--gold-light); border-radius: 8px; padding: 10px 14px; width: 100%; line-height: 1.5; }
+
+  .fc-loading { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .fc-loading-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; }
+  .fc-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+  .fc-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+  .fc-loading-dots { display: flex; gap: 6px; }
+  .fc-loading-text { font-size: 13px; color: var(--text3); }
+  @keyframes pulse { 0%,100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
+
+  .fc-rating { padding: 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .rating-btn {
+    padding: 12px 6px; border-radius: 10px; border: 1px solid;
+    font-size: 11px; font-weight: 600; font-family: var(--font-jp);
+    cursor: pointer; transition: all 0.15s; text-align: center;
+    line-height: 1.3;
+  }
+  .rating-btn:active { transform: scale(0.95); }
+  .rating-btn.forgot { background: var(--accent2-light); border-color: #E8B4A8; color: var(--accent2); }
+  .rating-btn.hard { background: #FEF9E7; border-color: #F0D080; color: #7A5C00; }
+  .rating-btn.good { background: var(--accent-light); border-color: #B8D89A; color: var(--accent); }
+  .rating-btn.easy { background: #EBF5FB; border-color: #A0CCE8; color: #1A5276; }
+  .rating-label { font-size: 9px; color: inherit; opacity: 0.7; margin-top: 2px; }
+
+  /* ── GRIND MODE BANNER ── */
+  .grind-banner {
+    margin: 0 20px 12px;
+    background: var(--accent2-light);
+    border: 1px solid #E8B4A8;
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer;
+  }
+  .grind-banner-text { flex: 1; font-size: 13px; color: var(--accent2); font-weight: 500; }
+  .grind-banner-sub { font-size: 11px; color: var(--accent2); opacity: 0.7; margin-top: 2px; }
+
+  /* ── DONE STATE ── */
+  .done-screen {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 24px; text-align: center;
+  }
+  .done-icon { font-size: 56px; margin-bottom: 16px; }
+  .done-title { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .done-sub { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 32px; }
+  .done-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; width: 100%; margin-bottom: 32px; }
+  .done-stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px 8px; }
+  .done-stat-num { font-family: var(--font-serif); font-size: 24px; font-weight: 600; color: var(--text); }
+  .done-stat-label { font-size: 10px; color: var(--text2); margin-top: 4px; letter-spacing: 0.04em; }
+
+  /* ── SETTINGS ── */
+  .settings-group { margin-bottom: 24px; }
+  .settings-group-title { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); font-weight: 600; margin-bottom: 10px; }
+  .setting-row {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 16px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: var(--card-shadow); margin-bottom: 8px;
+  }
+  .setting-label { font-size: 15px; color: var(--text); font-weight: 500; }
+  .setting-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .setting-control { display: flex; align-items: center; gap: 8px; }
+  .num-input {
+    width: 56px; text-align: center; padding: 6px 8px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface2); font-size: 16px; font-weight: 600;
+    color: var(--text); font-family: var(--font-mono);
+  }
+  .num-btn { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+
+  .danger-btn {
+    width: 100%; padding: 16px; border-radius: var(--radius-sm);
+    background: var(--accent2-light); color: var(--accent2);
+    border: 1px solid #E8B4A8;
+    font-size: 15px; font-weight: 600; font-family: var(--font-jp);
+    cursor: pointer; transition: all 0.15s; margin-bottom: 10px;
+  }
+  .danger-btn:active { transform: scale(0.98); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px); z-index: 200;
+    display: flex; align-items: flex-end; justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    width: 100%; max-width: 480px;
+    background: var(--surface);
+    border-radius: 24px 24px 0 0;
+    padding: 24px 24px calc(24px + env(safe-area-inset-bottom));
+    animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 99px; margin: 0 auto 20px; }
+  .modal-title { font-family: var(--font-serif); font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  .modal-body { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 24px; }
+  .modal-btns { display: flex; flex-direction: column; gap: 10px; }
+
+  /* ── LIBRARY PLACEHOLDER ── */
+  .library-tabs { display: flex; gap: 8px; padding: 0 20px 16px; overflow-x: auto; }
+  .lib-tab {
+    padding: 8px 16px; border-radius: 99px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--border); background: var(--surface); cursor: pointer;
+    white-space: nowrap; transition: all 0.15s; color: var(--text2);
+  }
+  .lib-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .coming-soon {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 60px 40px; text-align: center; color: var(--text3);
+  }
+  .coming-soon-icon { font-size: 48px; margin-bottom: 16px; }
+  .coming-soon-title { font-family: var(--font-serif); font-size: 20px; color: var(--text2); margin-bottom: 8px; }
+  .coming-soon-sub { font-size: 14px; line-height: 1.6; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: calc(var(--nav-h) + 12px); left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--text); color: white;
+    padding: 12px 20px; border-radius: 99px;
+    font-size: 13px; font-weight: 500; z-index: 300;
+    opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── WRAP UP ── */
+  .wrapup-badge {
+    background: var(--accent-light); border: 1px solid #B8D89A;
+    border-radius: var(--radius-sm); padding: 14px 16px;
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer;
+  }
+  .wrapup-badge-text { flex: 1; }
+  .wrapup-badge-title { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .wrapup-badge-sub { font-size: 12px; color: var(--accent); opacity: 0.8; margin-top: 2px; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 0; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ DASHBOARD ══════════════ -->
+<div id="home-screen" class="screen active">
+  <div class="header">
+    <div class="header-label">おはようございます</div>
+    <div class="header-title">日本語 Study</div>
+    <div class="header-sub" id="home-date"></div>
+  </div>
+  <div class="scroll-content">
+
+    <!-- Streak -->
+    <div class="streak-bar">
+      <div class="streak-icon">🔥</div>
+      <div>
+        <div class="streak-num" id="streak-num">0</div>
+        <div class="streak-label">day streak</div>
+      </div>
+      <div style="margin-left:auto; text-align:right;">
+        <div style="font-size:13px;color:var(--gold);font-weight:600;" id="level-badge">N5</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">current level</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="due-count">0</div>
+        <div class="stat-label">Due Today</div>
+        <div class="stat-sub" id="new-count-label">+0 new</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="learned-count">0</div>
+        <div class="stat-label">Total Learned</div>
+        <div class="stat-sub" id="mature-count-label">0 mature</div>
+      </div>
+    </div>
+
+    <!-- Daily progress -->
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>Today's new cards</span>
+        <span id="daily-progress-label">0 / 10</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="daily-progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- N5→N4 unlock progress -->
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>N5 mastery → unlock N4</span>
+        <span id="n5-progress-label">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="n5-progress-fill" style="width:0%; background: var(--gold)"></div>
+      </div>
+    </div>
+
+    <!-- Wrap-up available -->
+    <div class="wrapup-badge" id="wrapup-badge" style="display:none" onclick="startWrapUp()">
+      <div style="font-size:24px;">🔁</div>
+      <div class="wrapup-badge-text">
+        <div class="wrapup-badge-title">Wrap-up Session Ready</div>
+        <div class="wrapup-badge-sub">Review all <span id="wrapup-count">0</span> cards learned today</div>
+      </div>
+      <div style="color:var(--accent);font-size:18px;">›</div>
+    </div>
+
+    <!-- Main CTA -->
+    <button class="primary-btn" id="study-btn" onclick="startStudy()" style="margin-bottom:12px;">
+      Start Studying →
+    </button>
+
+    <div class="section-title">Study Modes</div>
+
+    <button class="action-btn" onclick="startStudy('flashcard')">
+      <div class="action-btn-icon" style="background:var(--accent-light);">🃏</div>
+      <div class="action-btn-text">
+        <div class="action-btn-title">Flashcards</div>
+        <div class="action-btn-sub">Vocab with AI explanations + SRS</div>
+      </div>
+      <div class="action-btn-arrow">›</div>
+    </button>
+
+    <button class="action-btn" style="opacity:0.5;" disabled>
+      <div class="action-btn-icon" style="background:#F0EAF8;">漢</div>
+      <div class="action-btn-text">
+        <div class="action-btn-title">Kanji Study</div>
+        <div class="action-btn-sub">Coming in Phase 2</div>
+      </div>
+      <div class="action-btn-arrow">›</div>
+    </button>
+
+    <button class="action-btn" style="opacity:0.5;" disabled>
+      <div class="action-btn-icon" style="background:#EAF4F8;">文</div>
+      <div class="action-btn-text">
+        <div class="action-btn-title">Grammar Drills</div>
+        <div class="action-btn-sub">Coming in Phase 2</div>
+      </div>
+      <div class="action-btn-arrow">›</div>
+    </button>
+
+    <button class="action-btn" style="opacity:0.5;" disabled>
+      <div class="action-btn-icon" style="background:#FEF9E7;">📖</div>
+      <div class="action-btn-text">
+        <div class="action-btn-title">Reading Passages</div>
+        <div class="action-btn-sub">Coming in Phase 2</div>
+      </div>
+      <div class="action-btn-arrow">›</div>
+    </button>
+
+    <button class="action-btn" style="opacity:0.5;" disabled>
+      <div class="action-btn-icon" style="background:var(--accent2-light);">📝</div>
+      <div class="action-btn-text">
+        <div class="action-btn-title">Mock Quiz</div>
+        <div class="action-btn-sub">Coming in Phase 2</div>
+      </div>
+      <div class="action-btn-arrow">›</div>
+    </button>
+
+  </div>
+</div>
+
+<!-- ══════════════ FLASHCARD ══════════════ -->
+<div id="flashcard-screen" class="screen">
+  <div class="fc-header">
+    <div class="fc-back-btn" onclick="exitStudy()">←</div>
+    <div class="fc-progress-text" id="fc-progress-text">Card 1 of 10</div>
+    <div class="fc-mode-label" id="fc-mode-label">New</div>
+  </div>
+  <div class="fc-progress-bar">
+    <div class="fc-progress-fill" id="fc-progress-fill" style="width:0%"></div>
+  </div>
+
+  <!-- Grind mode banner -->
+  <div class="grind-banner" id="grind-banner" style="display:none" onclick="showGrindModal()">
+    <div style="font-size:20px;">🔄</div>
+    <div class="grind-banner-text">
+      <div>Grind Mode</div>
+      <div class="grind-banner-sub">Reset & repeat today's cards</div>
+    </div>
+    <div style="color:var(--accent2);font-size:16px;">›</div>
+  </div>
+
+  <div class="fc-card-wrap" id="fc-card-wrap">
+    <!-- Card rendered by JS -->
+  </div>
+
+  <div class="fc-rating" id="fc-rating" style="display:none">
+    <button class="rating-btn forgot" onclick="rateCard(0)">
+      Forgot<div class="rating-label">Again</div>
+    </button>
+    <button class="rating-btn hard" onclick="rateCard(1)">
+      Hard<div class="rating-label">+1d</div>
+    </button>
+    <button class="rating-btn good" onclick="rateCard(2)">
+      Good<div class="rating-label">+3d</div>
+    </button>
+    <button class="rating-btn easy" onclick="rateCard(3)">
+      Easy<div class="rating-label">+7d</div>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════ LIBRARY ══════════════ -->
+<div id="library-screen" class="screen">
+  <div class="header">
+    <div class="header-label">Reference</div>
+    <div class="header-title">Library</div>
+    <div class="header-sub">Your complete study encyclopedia</div>
+  </div>
+  <div class="library-tabs">
+    <div class="lib-tab active">Vocabulary</div>
+    <div class="lib-tab">Kanji</div>
+    <div class="lib-tab">Grammar</div>
+    <div class="lib-tab">Particles</div>
+    <div class="lib-tab">Verb Forms</div>
+  </div>
+  <div class="coming-soon">
+    <div class="coming-soon-icon">📚</div>
+    <div class="coming-soon-title">Library Coming Soon</div>
+    <div class="coming-soon-sub">All N5 & N4 vocabulary, kanji, grammar points, and particles — with AI-powered explanations and examples. Available in Phase 2.</div>
+  </div>
+</div>
+
+<!-- ══════════════ SETTINGS ══════════════ -->
+<div id="settings-screen" class="screen">
+  <div class="header">
+    <div class="header-label">Preferences</div>
+    <div class="header-title">Settings</div>
+  </div>
+  <div class="scroll-content">
+
+    <div class="settings-group">
+      <div class="settings-group-title">Daily Study</div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">New cards per day</div>
+          <div class="setting-sub">How many new words to learn daily</div>
+        </div>
+        <div class="setting-control">
+          <button class="num-btn" onclick="adjustDailyLimit(-5)">−</button>
+          <input class="num-input" id="daily-limit-input" type="number" value="10" min="1" max="100" onchange="saveDailyLimit(this.value)">
+          <button class="num-btn" onclick="adjustDailyLimit(5)">+</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Day reset time</div>
+          <div class="setting-sub">New cards refresh at this hour</div>
+        </div>
+        <div class="setting-control" style="font-size:15px;font-weight:600;color:var(--text);font-family:var(--font-mono);">4:00 AM</div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">Progress</div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Cards learned</div>
+          <div class="setting-sub">Total unique cards reviewed</div>
+        </div>
+        <div class="setting-control" style="font-size:20px;font-weight:600;font-family:var(--font-serif);color:var(--text);" id="settings-learned">0</div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Current level</div>
+          <div class="setting-sub">Unlock N4 at 80% N5 mastery</div>
+        </div>
+        <div class="setting-control" style="font-size:15px;font-weight:600;color:var(--gold);" id="settings-level">N5</div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">Reset Options</div>
+      <button class="danger-btn" onclick="showResetModal('today')">🔄 Reset Today's Session</button>
+      <button class="danger-btn" onclick="showResetModal('all')" style="opacity:0.7;">☢️ Reset All Progress</button>
+    </div>
+
+    <div style="font-size:12px;color:var(--text3);text-align:center;padding:8px 0 16px;line-height:1.8;">
+      日本語 Study · Phase 1<br>
+      Built with Claude API · SRS powered by SM-2
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ BOTTOM NAV ══════════════ -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showScreen('home')">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label">Home</div>
+  </button>
+  <button class="nav-item" onclick="showScreen('flashcard-study')">
+    <div class="nav-icon">🃏</div>
+    <div class="nav-label">Study</div>
+  </button>
+  <button class="nav-item" onclick="showScreen('library')">
+    <div class="nav-icon">📚</div>
+    <div class="nav-label">Library</div>
+  </button>
+  <button class="nav-item" onclick="showScreen('settings')">
+    <div class="nav-icon">⚙️</div>
+    <div class="nav-label">Settings</div>
+  </button>
+</nav>
+
+<!-- ══════════════ MODALS ══════════════ -->
+<div class="modal-overlay hidden" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Reset Today?</div>
+    <div class="modal-body" id="modal-body">This will clear today's progress and let you restart from the beginning of today's word set.</div>
+    <div class="modal-btns" id="modal-btns"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
+const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
+const MODEL = 'claude-sonnet-4-20250514';
+const RESET_HOUR = 4; // 4am reset
+
+// ══════════════════════════════════════════
+// N5 CORE WORD LIST (seed deck)
+// ══════════════════════════════════════════
+const N5_WORDS = [
+  {id:'taberu',word:'食べる',reading:'たべる',pos:'verb (る)',level:'N5',category:'daily'},
+  {id:'nomu',word:'飲む',reading:'のむ',pos:'verb (う)',level:'N5',category:'daily'},
+  {id:'iku',word:'行く',reading:'いく',pos:'verb (う)',level:'N5',category:'movement'},
+  {id:'kuru',word:'来る',reading:'くる',pos:'verb (irregular)',level:'N5',category:'movement'},
+  {id:'miru',word:'見る',reading:'みる',pos:'verb (る)',level:'N5',category:'daily'},
+  {id:'kiku',word:'聞く',reading:'きく',pos:'verb (う)',level:'N5',category:'daily'},
+  {id:'hanasu',word:'話す',reading:'はなす',pos:'verb (う)',level:'N5',category:'communication'},
+  {id:'yomu',word:'読む',reading:'よむ',pos:'verb (う)',level:'N5',category:'study'},
+  {id:'kaku',word:'書く',reading:'かく',pos:'verb (う)',level:'N5',category:'study'},
+  {id:'suru',word:'する',reading:'する',pos:'verb (irregular)',level:'N5',category:'daily'},
+  {id:'aru',word:'ある',reading:'ある',pos:'verb (う)',level:'N5',category:'existence'},
+  {id:'iru',word:'いる',reading:'いる',pos:'verb (る)',level:'N5',category:'existence'},
+  {id:'watashi',word:'私',reading:'わたし',pos:'pronoun',level:'N5',category:'people'},
+  {id:'anata',word:'あなた',reading:'あなた',pos:'pronoun',level:'N5',category:'people'},
+  {id:'hito',word:'人',reading:'ひと',pos:'noun',level:'N5',category:'people'},
+  {id:'toki',word:'時',reading:'とき',pos:'noun',level:'N5',category:'time'},
+  {id:'ima',word:'今',reading:'いま',pos:'noun/adverb',level:'N5',category:'time'},
+  {id:'kyou',word:'今日',reading:'きょう',pos:'noun',level:'N5',category:'time'},
+  {id:'ashita',word:'明日',reading:'あした',pos:'noun',level:'N5',category:'time'},
+  {id:'kinou',word:'昨日',reading:'きのう',pos:'noun',level:'N5',category:'time'},
+  {id:'nani',word:'何',reading:'なに',pos:'pronoun',level:'N5',category:'question'},
+  {id:'doko',word:'どこ',reading:'どこ',pos:'pronoun',level:'N5',category:'question'},
+  {id:'itsu',word:'いつ',reading:'いつ',pos:'pronoun',level:'N5',category:'question'},
+  {id:'dare',word:'誰',reading:'だれ',pos:'pronoun',level:'N5',category:'question'},
+  {id:'okii',word:'大きい',reading:'おおきい',pos:'い-adjective',level:'N5',category:'description'},
+  {id:'chiisai',word:'小さい',reading:'ちいさい',pos:'い-adjective',level:'N5',category:'description'},
+  {id:'atarashii',word:'新しい',reading:'あたらしい',pos:'い-adjective',level:'N5',category:'description'},
+  {id:'furui',word:'古い',reading:'ふるい',pos:'い-adjective',level:'N5',category:'description'},
+  {id:'takai',word:'高い',reading:'たかい',pos:'い-adjective',level:'N5',category:'description'},
+  {id:'yasui',word:'安い',reading:'やすい',pos:'い-adjective',level:'N5',category:'description'},
+  {id:'ii',word:'いい',reading:'いい',pos:'い-adjective',level:'N5',category:'description'},
+  {id:'warui',word:'悪い',reading:'わるい',pos:'い-adjective',level:'N5',category:'description'},
+  {id:'suki',word:'好き',reading:'すき',pos:'な-adjective',level:'N5',category:'feeling'},
+  {id:'kirai',word:'嫌い',reading:'きらい',pos:'な-adjective',level:'N5',category:'feeling'},
+  {id:'genki',word:'元気',reading:'げんき',pos:'な-adjective/noun',level:'N5',category:'feeling'},
+  {id:'shizuka',word:'静か',reading:'しずか',pos:'な-adjective',level:'N5',category:'description'},
+  {id:'machi',word:'町',reading:'まち',pos:'noun',level:'N5',category:'place'},
+  {id:'ie',word:'家',reading:'いえ',pos:'noun',level:'N5',category:'place'},
+  {id:'gakkou',word:'学校',reading:'がっこう',pos:'noun',level:'N5',category:'place'},
+  {id:'mise',word:'店',reading:'みせ',pos:'noun',level:'N5',category:'place'},
+  {id:'densha',word:'電車',reading:'でんしゃ',pos:'noun',level:'N5',category:'transport'},
+  {id:'kuruma',word:'車',reading:'くるま',pos:'noun',level:'N5',category:'transport'},
+  {id:'okane',word:'お金',reading:'おかね',pos:'noun',level:'N5',category:'daily'},
+  {id:'shigoto',word:'仕事',reading:'しごと',pos:'noun',level:'N5',category:'work'},
+  {id:'tomodachi',word:'友達',reading:'ともだち',pos:'noun',level:'N5',category:'people'},
+  {id:'sensei',word:'先生',reading:'せんせい',pos:'noun',level:'N5',category:'people'},
+  {id:'gakusei',word:'学生',reading:'がくせい',pos:'noun',level:'N5',category:'people'},
+  {id:'kazoku',word:'家族',reading:'かぞく',pos:'noun',level:'N5',category:'people'},
+  {id:'chichi',word:'父',reading:'ちち',pos:'noun',level:'N5',category:'people'},
+  {id:'haha',word:'母',reading:'はは',pos:'noun',level:'N5',category:'people'},
+];
+
+// ══════════════════════════════════════════
+// STATE & STORAGE
+// ══════════════════════════════════════════
+function getState() {
+  return JSON.parse(localStorage.getItem('nihongo_state') || JSON.stringify({
+    cards: {},
+    dailyLimit: 10,
+    streak: 0,
+    lastStudyDate: null,
+    todayLearned: [],
+    todayDate: null,
+    n4Unlocked: false,
+    totalReviewed: 0,
+  }));
+}
+function saveState(s) { localStorage.setItem('nihongo_state', JSON.stringify(s)); }
+
+function getCardState(id) {
+  const s = getState();
+  return s.cards[id] || {
+    id, interval: 0, easeFactor: 2.5,
+    nextReview: null, reviews: 0, lapses: 0, mature: false, learnedOn: null
+  };
+}
+
+// ══════════════════════════════════════════
+// DATE / RESET LOGIC
+// ══════════════════════════════════════════
+function getStudyDate() {
+  const now = new Date();
+  if (now.getHours() < RESET_HOUR) now.setDate(now.getDate() - 1);
+  return now.toISOString().split('T')[0];
+}
+
+function checkDayReset() {
+  const s = getState();
+  const today = getStudyDate();
+  if (s.todayDate !== today) {
+    s.todayDate = today;
+    s.todayLearned = [];
+    saveState(s);
+  }
+  return s;
+}
+
+// ══════════════════════════════════════════
+// SRS ENGINE (SM-2)
+// ══════════════════════════════════════════
+function sm2(card, rating) {
+  // rating: 0=forgot, 1=hard, 2=good, 3=easy
+  let { interval, easeFactor, lapses } = card;
+  const intervals = [1, 3, 7, 14];
+  if (rating === 0) { interval = 1; lapses++; easeFactor = Math.max(1.3, easeFactor - 0.2); }
+  else if (rating === 1) { interval = Math.max(1, Math.round(interval * 1.2)); easeFactor = Math.max(1.3, easeFactor - 0.15); }
+  else if (rating === 2) { interval = interval === 0 ? 3 : Math.round(interval * easeFactor); }
+  else { interval = interval === 0 ? 7 : Math.round(interval * easeFactor * 1.3); easeFactor = Math.min(3.0, easeFactor + 0.1); }
+  const nextReview = new Date();
+  nextReview.setDate(nextReview.getDate() + interval);
+  const mature = interval >= 21;
+  return { ...card, interval, easeFactor, lapses, nextReview: nextReview.toISOString().split('T')[0], mature, reviews: card.reviews + 1 };
+}
+
+function getDueCards() {
+  const today = getStudyDate();
+  return N5_WORDS.filter(w => {
+    const c = getCardState(w.id);
+    if (!c.nextReview) return false;
+    return c.nextReview <= today;
+  });
+}
+
+function getNewCards(limit) {
+  const s = getState();
+  const learned = new Set(s.todayLearned);
+  const all = N5_WORDS.filter(w => {
+    const c = getCardState(w.id);
+    return !c.nextReview && !learned.has(w.id);
+  });
+  return all.slice(0, limit);
+}
+
+// ══════════════════════════════════════════
+// AI CONTENT GENERATION
+// ══════════════════════════════════════════
+const cardCache = {};
+
+async function generateCardContent(word) {
+  if (cardCache[word.id]) return cardCache[word.id];
+  const prompt = `Generate a Japanese flashcard for the word "${word.word}" (${word.reading}), a ${word.pos} at JLPT ${word.level} level.
+
+Return ONLY valid JSON with this exact structure, no markdown:
+{
+  "meaning": "English meaning (concise, 1-4 words)",
+  "example_jp": "A short example sentence in Japanese using this word (natural, N5/N4 level)",
+  "example_en": "English translation of the example sentence",
+  "tip": "A short memorable tip or mnemonic to remember this word (1-2 sentences)"
+}`;
+
+  const res = await fetch(CLAUDE_API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: MODEL,
+      max_tokens: 300,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await res.json();
+  const text = data.content?.[0]?.text || '{}';
+  try {
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    cardCache[word.id] = parsed;
+    return parsed;
+  } catch { return { meaning: '—', example_jp: '—', example_en: '—', tip: '—' }; }
+}
+
+// ══════════════════════════════════════════
+// STUDY SESSION
+// ══════════════════════════════════════════
+let session = { queue: [], index: 0, flipped: false, isNew: false, wrapUp: false, sessionLearned: [] };
+
+function buildQueue() {
+  const s = checkDayReset();
+  const dailyLimit = s.dailyLimit || 10;
+  const alreadyLearnedToday = s.todayLearned.length;
+  const newSlots = Math.max(0, dailyLimit - alreadyLearnedToday);
+  const due = getDueCards();
+  const newCards = getNewCards(newSlots);
+  return [...due, ...newCards];
+}
+
+function startStudy(mode) {
+  const queue = buildQueue();
+  if (queue.length === 0) {
+    showToast('No cards due! Check back later 🎉');
+    return;
+  }
+  session = { queue, index: 0, flipped: false, sessionLearned: [], wrapUp: false };
+  showScreen('flashcard');
+  renderCard();
+}
+
+function startWrapUp() {
+  const s = getState();
+  const todayWords = N5_WORDS.filter(w => s.todayLearned.includes(w.id));
+  if (todayWords.length === 0) { showToast('Nothing learned today yet!'); return; }
+  session = { queue: [...todayWords], index: 0, flipped: false, sessionLearned: [], wrapUp: true };
+  showScreen('flashcard');
+  renderCard();
+}
+
+async function renderCard() {
+  const wrap = document.getElementById('fc-card-wrap');
+  const rating = document.getElementById('fc-rating');
+  const grindBanner = document.getElementById('grind-banner');
+  const total = session.queue.length;
+  const idx = session.index;
+
+  if (idx >= total) { showDone(); return; }
+
+  const word = session.queue[idx];
+  const cardData = getCardState(word.id);
+  const isNew = !cardData.nextReview;
+
+  document.getElementById('fc-progress-text').textContent = `${idx + 1} of ${total}`;
+  document.getElementById('fc-mode-label').textContent = session.wrapUp ? 'Wrap-up' : isNew ? 'New' : 'Review';
+  document.getElementById('fc-progress-fill').style.width = `${(idx / total) * 100}%`;
+  grindBanner.style.display = session.wrapUp ? 'none' : 'flex';
+  rating.style.display = 'none';
+  session.flipped = false;
+
+  // Front face
+  wrap.innerHTML = `
+    <div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-face fc-front">
+        <div class="fc-hint">${word.level} · ${word.pos}</div>
+        <div class="fc-word">${word.word}</div>
+        <div class="fc-furigana">${word.reading}</div>
+        <div class="fc-tap-hint">👆 tap to reveal</div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-loading">
+          <div class="fc-loading-dots">
+            <div class="fc-loading-dot"></div>
+            <div class="fc-loading-dot"></div>
+            <div class="fc-loading-dot"></div>
+          </div>
+          <div class="fc-loading-text">Generating with AI…</div>
+        </div>
+      </div>
+    </div>`;
+
+  // Pre-fetch AI content
+  generateCardContent(word).then(content => {
+    const back = document.querySelector('.fc-back');
+    if (!back) return;
+    back.innerHTML = `
+      <div class="fc-hint">${word.level} · ${word.pos}</div>
+      <div class="fc-meaning">${content.meaning || word.reading}</div>
+      <div class="fc-example">
+        <div class="fc-example-jp">${content.example_jp || '—'}</div>
+        <div class="fc-example-en">${content.example_en || '—'}</div>
+      </div>
+      ${content.tip ? `<div class="fc-tip">💡 ${content.tip}</div>` : ''}`;
+  });
+}
+
+function flipCard() {
+  if (session.flipped) return;
+  session.flipped = true;
+  const card = document.getElementById('fc-card');
+  if (card) card.classList.add('flipped');
+  document.getElementById('fc-rating').style.display = 'grid';
+}
+
+function rateCard(rating) {
+  const word = session.queue[session.index];
+  const card = sm2(getCardState(word.id), rating);
+  card.learnedOn = getStudyDate();
+
+  const s = getState();
+  s.cards[word.id] = card;
+
+  // Track new cards learned today
+  if (!s.todayLearned.includes(word.id) && !getCardState(word.id).nextReview) {
+    s.todayLearned.push(word.id);
+  }
+  s.totalReviewed = (s.totalReviewed || 0) + 1;
+
+  // Streak update
+  const today = getStudyDate();
+  if (s.lastStudyDate !== today) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yStr = yesterday.toISOString().split('T')[0];
+    s.streak = s.lastStudyDate === yStr ? (s.streak || 0) + 1 : 1;
+    s.lastStudyDate = today;
+  }
+
+  saveState(s);
+  session.sessionLearned.push(word.id);
+  session.index++;
+  renderCard();
+}
+
+function showDone() {
+  const s = getState();
+  const wrap = document.getElementById('fc-card-wrap');
+  document.getElementById('fc-rating').style.display = 'none';
+  document.getElementById('grind-banner').style.display = 'none';
+
+  const correct = session.sessionLearned.length;
+  const isWrapUp = session.wrapUp;
+
+  wrap.innerHTML = `
+    <div class="done-screen">
+      <div class="done-icon">${isWrapUp ? '🏆' : '✅'}</div>
+      <div class="done-title">${isWrapUp ? 'Wrap-up Complete!' : 'Session Complete!'}</div>
+      <div class="done-sub">${isWrapUp ? 'Great work! You reviewed all of today\'s new words.' : 'You\'ve finished all cards for this session.'}</div>
+      <div class="done-stats">
+        <div class="done-stat">
+          <div class="done-stat-num">${correct}</div>
+          <div class="done-stat-label">Reviewed</div>
+        </div>
+        <div class="done-stat">
+          <div class="done-stat-num">${s.todayLearned.length}</div>
+          <div class="done-stat-label">Learned Today</div>
+        </div>
+        <div class="done-stat">
+          <div class="done-stat-num">${s.streak || 0}🔥</div>
+          <div class="done-stat-label">Day Streak</div>
+        </div>
+      </div>
+      <button class="primary-btn" onclick="exitStudy()" style="margin-bottom:10px;">Back to Home</button>
+      ${!isWrapUp ? `<button class="secondary-btn" onclick="startWrapUp()">🔁 Wrap-up Session</button>` : ''}
+    </div>`;
+}
+
+function exitStudy() {
+  showScreen('home');
+  updateDashboard();
+}
+
+// ══════════════════════════════════════════
+// SCREEN NAVIGATION
+// ══════════════════════════════════════════
+const screens = { home: 'home-screen', flashcard: 'flashcard-screen', library: 'library-screen', settings: 'settings-screen' };
+const navItems = document.querySelectorAll('.nav-item');
+const navMap = ['home', 'flashcard-study', 'library', 'settings'];
+
+function showScreen(name) {
+  if (name === 'flashcard-study') { startStudy(); return; }
+  Object.values(screens).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('active'); el.style.display = ''; }
+  });
+  const target = screens[name];
+  if (target) {
+    const el = document.getElementById(target);
+    el.classList.add('active');
+  }
+  navItems.forEach((item, i) => {
+    item.classList.toggle('active', navMap[i] === name || (name === 'flashcard' && navMap[i] === 'flashcard-study'));
+  });
+  if (name === 'home') updateDashboard();
+  if (name === 'settings') updateSettings();
+}
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+function updateDashboard() {
+  const s = checkDayReset();
+  const due = getDueCards();
+  const newCards = getNewCards(Math.max(0, (s.dailyLimit || 10) - s.todayLearned.length));
+  const total = due.length + newCards.length;
+  const learned = Object.keys(s.cards).filter(id => s.cards[id].nextReview).length;
+  const mature = Object.keys(s.cards).filter(id => s.cards[id].mature).length;
+  const n5Total = N5_WORDS.length;
+  const n5Mastery = Math.round((mature / n5Total) * 100);
+
+  document.getElementById('streak-num').textContent = s.streak || 0;
+  document.getElementById('due-count').textContent = total;
+  document.getElementById('new-count-label').textContent = `+${newCards.length} new`;
+  document.getElementById('learned-count').textContent = learned;
+  document.getElementById('mature-count-label').textContent = `${mature} mature`;
+  document.getElementById('daily-progress-label').textContent = `${s.todayLearned.length} / ${s.dailyLimit || 10}`;
+  document.getElementById('daily-progress-fill').style.width = `${Math.min(100, (s.todayLearned.length / (s.dailyLimit || 10)) * 100)}%`;
+  document.getElementById('n5-progress-label').textContent = `${n5Mastery}%`;
+  document.getElementById('n5-progress-fill').style.width = `${n5Mastery}%`;
+  document.getElementById('study-btn').textContent = total > 0 ? `Study Now (${total} cards) →` : 'All caught up! 🎉';
+  document.getElementById('study-btn').disabled = total === 0;
+
+  // Wrap-up badge
+  const wrapupBadge = document.getElementById('wrapup-badge');
+  const wrapupCount = document.getElementById('wrapup-count');
+  if (s.todayLearned.length > 0) {
+    wrapupBadge.style.display = 'flex';
+    wrapupCount.textContent = s.todayLearned.length;
+  } else {
+    wrapupBadge.style.display = 'none';
+  }
+
+  // Date greeting
+  const now = new Date();
+  const hour = now.getHours();
+  const greetings = [[5,'おはようございます'],[12,'こんにちは'],[18,'こんばんは'],[24,'おやすみなさい']];
+  const greeting = greetings.find(([h]) => hour < h)?.[1] || 'こんにちは';
+  document.querySelector('.header-label').textContent = greeting;
+  document.getElementById('home-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+  // N4 unlock
+  if (n5Mastery >= 80 && !s.n4Unlocked) {
+    s.n4Unlocked = true;
+    saveState(s);
+    showToast('🎉 N4 Unlocked! おめでとう！');
+  }
+  document.getElementById('level-badge').textContent = s.n4Unlocked ? 'N5 + N4' : 'N5';
+}
+
+function updateSettings() {
+  const s = getState();
+  document.getElementById('daily-limit-input').value = s.dailyLimit || 10;
+  const learned = Object.keys(s.cards).filter(id => s.cards[id].nextReview).length;
+  document.getElementById('settings-learned').textContent = learned;
+  document.getElementById('settings-level').textContent = s.n4Unlocked ? 'N5 + N4' : 'N5';
+}
+
+// ══════════════════════════════════════════
+// SETTINGS CONTROLS
+// ══════════════════════════════════════════
+function adjustDailyLimit(delta) {
+  const input = document.getElementById('daily-limit-input');
+  const val = Math.min(100, Math.max(1, parseInt(input.value) + delta));
+  input.value = val;
+  saveDailyLimit(val);
+}
+
+function saveDailyLimit(val) {
+  const s = getState();
+  s.dailyLimit = Math.min(100, Math.max(1, parseInt(val) || 10));
+  saveState(s);
+  updateDashboard();
+}
+
+// ══════════════════════════════════════════
+// RESET MODALS
+// ══════════════════════════════════════════
+function showResetModal(type) {
+  const overlay = document.getElementById('modal-overlay');
+  const title = document.getElementById('modal-title');
+  const body = document.getElementById('modal-body');
+  const btns = document.getElementById('modal-btns');
+
+  if (type === 'today') {
+    title.textContent = 'Reset Today?';
+    body.textContent = "This clears today's new cards and lets you restart from scratch. Your past SRS history stays intact.";
+    btns.innerHTML = `
+      <button class="danger-btn" onclick="resetToday()">🔄 Reset Today's Session</button>
+      <button class="secondary-btn" onclick="closeModal()">Cancel</button>`;
+  } else {
+    title.textContent = '☢️ Reset Everything?';
+    body.textContent = 'This permanently erases ALL your progress, SRS history, and streak. You will start completely from day one. This cannot be undone.';
+    btns.innerHTML = `
+      <button class="danger-btn" onclick="resetAll()">Yes, erase everything</button>
+      <button class="secondary-btn" onclick="closeModal()">Cancel</button>`;
+  }
+  overlay.classList.remove('hidden');
+}
+
+function showGrindModal() {
+  const overlay = document.getElementById('modal-overlay');
+  document.getElementById('modal-title').textContent = 'Grind Mode';
+  document.getElementById('modal-body').textContent = "Reset today's session to drill the same word set again. Great for repetition on tough words. Your SRS history is preserved.";
+  document.getElementById('modal-btns').innerHTML = `
+    <button class="primary-btn" onclick="resetToday()">🔄 Restart Today</button>
+    <button class="secondary-btn" onclick="closeModal()">Cancel</button>`;
+  overlay.classList.remove('hidden');
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+
+function resetToday() {
+  const s = getState();
+  s.todayLearned = [];
+  s.todayDate = null;
+  saveState(s);
+  closeModal();
+  showToast("Today's session reset 🔄");
+  updateDashboard();
+}
+
+function resetAll() {
+  localStorage.removeItem('nihongo_state');
+  Object.keys(cardCache).forEach(k => delete cardCache[k]);
+  closeModal();
+  showToast('All progress reset ☢️');
+  updateDashboard();
+  updateSettings();
+}
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+checkDayReset();
+updateDashboard();
+showScreen('home');
+</script>
+</body>
+</html>
