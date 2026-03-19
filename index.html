@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FAFAF8">
+<title>日本語 — JLPT N5 Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FAFAF8;--surface:#FFF;--surface2:#F4F3EF;--border:#E8E6E0;
+  --text:#1A1A18;--text2:#6B6860;--text3:#A8A69E;
+  --accent:#2D5016;--accent-light:#EBF2E3;
+  --accent2:#8B1A00;--accent2-light:#FAEEE9;
+  --gold:#B8860B;--gold-light:#FDF6E3;
+  --blue:#1A4A7A;--blue-light:#EBF2FB;
+  --shadow:0 2px 12px rgba(0,0,0,0.06),0 1px 3px rgba(0,0,0,0.04);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.10),0 2px 8px rgba(0,0,0,0.06);
+  --r:16px;--rs:10px;--nav:72px;
+  --jp:'Noto Sans JP',sans-serif;--serif:'Noto Serif JP',serif;--mono:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--jp);background:var(--bg);color:var(--text);min-height:100dvh;max-width:480px;margin:0 auto;overflow-x:hidden}
+.screen{display:none;flex-direction:column;min-height:100dvh;padding-bottom:var(--nav);animation:fadeIn .2s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.header{padding:56px 24px 20px;background:var(--bg);position:sticky;top:0;z-index:10}
+.header-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);font-weight:500;margin-bottom:4px}
+.header-title{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.2}
+.header-sub{font-size:13px;color:var(--text2);margin-top:4px}
+.scroll-content{flex:1;overflow-y:auto;padding:0 20px 24px}
+::-webkit-scrollbar{width:0}
+
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:var(--nav);background:rgba(250,250,248,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 8px;padding-bottom:env(safe-area-inset-bottom);z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 12px;border-radius:12px;cursor:pointer;flex:1;border:none;background:none}
+.nav-item.active .nav-icon{color:var(--accent)}
+.nav-item.active .nav-label{color:var(--accent);font-weight:600}
+.nav-icon{font-size:22px;color:var(--text3)}
+.nav-label{font-size:10px;color:var(--text3);letter-spacing:.04em;font-weight:500}
+
+/* DASHBOARD */
+.streak-bar{background:var(--gold-light);border:1px solid #E8D48A;border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.streak-num{font-family:var(--serif);font-size:28px;font-weight:600;color:var(--gold);line-height:1}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:16px;box-shadow:var(--shadow)}
+.stat-num{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1}
+.stat-label{font-size:11px;color:var(--text2);margin-top:4px;letter-spacing:.04em}
+.stat-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.progress-section{margin-bottom:16px}
+.progress-label{font-size:12px;color:var(--text2);margin-bottom:8px;display:flex;justify-content:space-between}
+.progress-bar{height:6px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.section-title{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);font-weight:600;margin:20px 0 10px}
+.action-btn{width:100%;padding:16px 20px;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--shadow);transition:all .15s;text-align:left;margin-bottom:10px}
+.action-btn:active{transform:scale(.98);background:var(--surface2)}
+.action-btn:disabled{opacity:.45;cursor:not-allowed}
+.action-btn-icon{font-size:22px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:10px;flex-shrink:0}
+.action-btn-title{font-size:15px;font-weight:600;color:var(--text)}
+.action-btn-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.wrapup-badge{background:var(--accent-light);border:1px solid #B8D89A;border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer}
+.wrapup-title{font-size:14px;font-weight:600;color:var(--accent)}
+.wrapup-sub{font-size:12px;color:var(--accent);opacity:.8;margin-top:2px}
+
+/* BUTTONS */
+.primary-btn{width:100%;padding:18px;border-radius:var(--rs);background:var(--accent);color:#fff;border:none;font-size:16px;font-weight:600;font-family:var(--jp);cursor:pointer;transition:all .15s;box-shadow:0 4px 16px rgba(45,80,22,.25)}
+.primary-btn:active{transform:scale(.98);opacity:.9}
+.primary-btn:disabled{background:var(--text3);box-shadow:none;cursor:not-allowed}
+.secondary-btn{width:100%;padding:16px;border-radius:var(--rs);background:var(--surface2);color:var(--text);border:1px solid var(--border);font-size:15px;font-weight:500;font-family:var(--jp);cursor:pointer;transition:all .15s}
+.secondary-btn:active{transform:scale(.98)}
+.danger-btn{width:100%;padding:16px;border-radius:var(--rs);background:var(--accent2-light);color:var(--accent2);border:1px solid #E8B4A8;font-size:15px;font-weight:600;font-family:var(--jp);cursor:pointer;transition:all .15s;margin-bottom:10px}
+.danger-btn:active{transform:scale(.98)}
+
+/* FLASHCARD */
+.fc-header{padding:56px 24px 16px;display:flex;align-items:center;gap:12px}
+.fc-back-btn{width:36px;height:36px;border-radius:10px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:var(--shadow);flex-shrink:0}
+.fc-progress-text{font-size:13px;color:var(--text2);flex:1;text-align:center}
+.fc-mode-label{font-size:12px;color:var(--text3);background:var(--surface2);padding:4px 10px;border-radius:99px;border:1px solid var(--border);white-space:nowrap}
+.fc-pbar{height:3px;background:var(--surface2);margin:0 24px 20px;border-radius:99px}
+.fc-pfill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease}
+.fc-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 20px;perspective:1200px}
+.fc-card{width:100%;max-width:400px;min-height:320px;position:relative;cursor:pointer;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;background:var(--surface);border-radius:20px;border:1px solid var(--border);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.fc-back{transform:rotateY(180deg)}
+.fc-hint{font-size:11px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.fc-word{font-family:var(--serif);font-size:52px;font-weight:600;text-align:center;line-height:1.2;margin-bottom:8px}
+.fc-reading{font-size:15px;color:var(--text2);text-align:center;margin-bottom:6px}
+.fc-pos-tag{font-size:11px;color:var(--text3);background:var(--surface2);padding:3px 10px;border-radius:99px}
+.fc-tap{font-size:12px;color:var(--text3);margin-top:20px}
+.fc-meaning{font-size:22px;font-weight:600;text-align:center;margin-bottom:14px}
+.fc-example{background:var(--surface2);border-radius:10px;padding:12px 14px;width:100%;margin-bottom:10px}
+.fc-ex-jp{font-size:14px;line-height:1.7;margin-bottom:5px}
+.fc-ex-en{font-size:12px;color:var(--text2);line-height:1.5}
+.fc-tip{font-size:12px;color:var(--gold);background:var(--gold-light);border-radius:8px;padding:10px 14px;width:100%;line-height:1.5}
+.fc-rating{padding:16px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.r-btn{padding:12px 4px;border-radius:10px;border:1px solid;font-size:11px;font-weight:600;font-family:var(--jp);cursor:pointer;transition:all .15s;text-align:center;line-height:1.3}
+.r-btn:active{transform:scale(.95)}
+.r-btn.forgot{background:var(--accent2-light);border-color:#E8B4A8;color:var(--accent2)}
+.r-btn.hard{background:#FEF9E7;border-color:#F0D080;color:#7A5C00}
+.r-btn.good{background:var(--accent-light);border-color:#B8D89A;color:var(--accent)}
+.r-btn.easy{background:var(--blue-light);border-color:#A0CCE8;color:var(--blue)}
+.r-sub{font-size:9px;opacity:.7;margin-top:2px}
+.grind-bar{margin:0 20px 12px;background:var(--accent2-light);border:1px solid #E8B4A8;border-radius:var(--rs);padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
+
+/* DONE */
+.done-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
+.done-icon{font-size:56px;margin-bottom:16px}
+.done-title{font-family:var(--serif);font-size:24px;font-weight:600;margin-bottom:8px}
+.done-sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px}
+.done-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-bottom:24px}
+.done-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:14px 6px}
+.done-stat-n{font-family:var(--serif);font-size:22px;font-weight:600}
+.done-stat-l{font-size:10px;color:var(--text2);margin-top:3px}
+
+/* LIBRARY */
+.lib-tabs{display:flex;gap:8px;padding:0 20px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.lib-tab{padding:8px 16px;border-radius:99px;font-size:13px;font-weight:500;border:1px solid var(--border);background:var(--surface);cursor:pointer;white-space:nowrap;color:var(--text2);transition:all .15s;flex-shrink:0}
+.lib-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.lib-content{flex:1;overflow-y:auto;padding:0 20px 24px}
+.lib-search{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:var(--rs);background:var(--surface);font-size:15px;font-family:var(--jp);color:var(--text);margin-bottom:16px;outline:none;box-shadow:var(--shadow)}
+.lib-filter-row{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto}
+.filter-chip{padding:6px 12px;border-radius:99px;font-size:12px;border:1px solid var(--border);background:var(--surface);cursor:pointer;white-space:nowrap;color:var(--text2);flex-shrink:0}
+.filter-chip.active{background:var(--surface2);border-color:var(--text3);color:var(--text);font-weight:600}
+.lib-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:16px;box-shadow:var(--shadow);margin-bottom:10px}
+.lib-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.lib-word{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1.2}
+.lib-reading{font-size:13px;color:var(--text2);margin-top:3px}
+.lib-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.badge{font-size:10px;padding:3px 8px;border-radius:99px;font-weight:600;letter-spacing:.04em}
+.badge-n5{background:var(--accent-light);color:var(--accent)}
+.badge-pos{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+.badge-cat{background:var(--gold-light);color:var(--gold)}
+.lib-meaning{font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.lib-example{background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+.lib-ex-jp{font-size:13px;line-height:1.7;margin-bottom:4px}
+.lib-ex-en{font-size:11px;color:var(--text2)}
+.lib-tip{font-size:11px;color:var(--gold);background:var(--gold-light);border-radius:6px;padding:8px 10px;line-height:1.5}
+.lib-empty{text-align:center;padding:48px 20px;color:var(--text3)}
+.lib-empty-icon{font-size:40px;margin-bottom:12px}
+.lib-empty-text{font-size:14px}
+
+/* KANJI CARD */
+.kanji-big{font-family:var(--serif);font-size:48px;font-weight:600;line-height:1;margin-bottom:6px}
+.readings-row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.reading-group{background:var(--surface2);border-radius:8px;padding:8px 12px;flex:1;min-width:120px}
+.reading-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.reading-val{font-size:13px;color:var(--text);font-weight:500;line-height:1.5}
+
+/* GRAMMAR CARD */
+.grammar-pattern{font-family:var(--mono);font-size:14px;background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:10px;color:var(--accent);border-left:3px solid var(--accent)}
+.grammar-when{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+.grammar-formal{display:inline-block;font-size:10px;padding:3px 8px;border-radius:99px;font-weight:600;margin-bottom:8px}
+.formal-casual{background:#FEF9E7;color:#7A5C00}
+.formal-polite{background:var(--blue-light);color:var(--blue)}
+.formal-both{background:var(--surface2);color:var(--text2)}
+
+/* SETTINGS */
+.settings-group{margin-bottom:24px}
+.sg-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-weight:600;margin-bottom:10px}
+.setting-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow);margin-bottom:8px}
+.setting-label{font-size:15px;font-weight:500}
+.setting-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.num-input{width:56px;text-align:center;padding:6px 8px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);font-size:16px;font-weight:600;color:var(--text);font-family:var(--mono)}
+.num-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease}
+.modal-overlay.hidden{display:none}
+.modal{width:100%;max-width:480px;background:var(--surface);border-radius:24px 24px 0 0;padding:24px 24px calc(24px + env(safe-area-inset-bottom));animation:slideUp .3s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:99px;margin:0 auto 20px}
+.modal-title{font-family:var(--serif);font-size:20px;font-weight:600;margin-bottom:8px}
+.modal-body{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px}
+.modal-btns{display:flex;flex-direction:column;gap:10px}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(var(--nav) + 12px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;padding:12px 20px;border-radius:99px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home-screen" class="screen active">
+  <div class="header">
+    <div class="header-label" id="greeting">おはようございます</div>
+    <div class="header-title">日本語 Study</div>
+    <div class="header-sub" id="home-date"></div>
+  </div>
+  <div class="scroll-content">
+    <div class="streak-bar">
+      <div style="font-size:28px">🔥</div>
+      <div><div class="streak-num" id="streak-num">0</div><div style="font-size:12px;color:var(--text2)">day streak</div></div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:13px;font-weight:600;color:var(--gold)" id="level-badge">N5</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">current level</div>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num" id="due-count">0</div><div class="stat-label">Due Today</div><div class="stat-sub" id="new-label">+0 new</div></div>
+      <div class="stat-card"><div class="stat-num" id="learned-count">0</div><div class="stat-label">Total Learned</div><div class="stat-sub" id="mature-label">0 mature</div></div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-label"><span>Today's new cards</span><span id="daily-label">0 / 10</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="daily-fill" style="width:0%"></div></div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-label"><span>N5 mastery → unlock N4</span><span id="n5-label">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="n5-fill" style="width:0%;background:var(--gold)"></div></div>
+    </div>
+    <div class="wrapup-badge" id="wrapup-badge" style="display:none" onclick="startWrapUp()">
+      <div style="font-size:24px">🔁</div>
+      <div><div class="wrapup-title">Wrap-up Session Ready</div><div class="wrapup-sub">Review all <span id="wrapup-count">0</span> cards learned today</div></div>
+      <div style="color:var(--accent);font-size:18px;margin-left:auto">›</div>
+    </div>
+    <button class="primary-btn" id="study-btn" onclick="startStudy()" style="margin-bottom:12px">Study Now →</button>
+    <div class="section-title">Study Modes</div>
+    <button class="action-btn" onclick="startStudy()">
+      <div class="action-btn-icon" style="background:var(--accent-light)">🃏</div>
+      <div><div class="action-btn-title">Flashcards</div><div class="action-btn-sub">Vocab SRS · <span id="fc-count">0</span> due</div></div>
+      <div style="color:var(--text3);font-size:18px">›</div>
+    </button>
+    <button class="action-btn" onclick="showScreen('library');setLibTab('kanji')">
+      <div class="action-btn-icon" style="background:#F0EAF8;font-family:var(--serif);font-size:20px">漢</div>
+      <div><div class="action-btn-title">Kanji Library</div><div class="action-btn-sub">All 103 N5 kanji with readings</div></div>
+      <div style="color:var(--text3);font-size:18px">›</div>
+    </button>
+    <button class="action-btn" onclick="showScreen('library');setLibTab('grammar')">
+      <div class="action-btn-icon" style="background:var(--blue-light);font-size:20px">文</div>
+      <div><div class="action-btn-title">Grammar Guide</div><div class="action-btn-sub">80 N5 grammar patterns</div></div>
+      <div style="color:var(--text3);font-size:18px">›</div>
+    </button>
+    <button class="action-btn" onclick="showScreen('library')">
+      <div class="action-btn-icon" style="background:var(--gold-light)">📖</div>
+      <div><div class="action-btn-title">Vocabulary Library</div><div class="action-btn-sub">~800 N5 words, searchable</div></div>
+      <div style="color:var(--text3);font-size:18px">›</div>
+    </button>
+  </div>
+</div>
+
+<!-- FLASHCARD -->
+<div id="flashcard-screen" class="screen">
+  <div class="fc-header">
+    <div class="fc-back-btn" onclick="exitStudy()">←</div>
+    <div class="fc-progress-text" id="fc-prog-text">1 of 10</div>
+    <div class="fc-mode-label" id="fc-mode">New</div>
+  </div>
+  <div class="fc-pbar"><div class="fc-pfill" id="fc-pfill" style="width:0%"></div></div>
+  <div class="grind-bar" id="grind-bar" style="display:none" onclick="showGrindModal()">
+    <div style="font-size:20px">🔄</div>
+    <div style="flex:1"><div style="font-size:13px;color:var(--accent2);font-weight:600">Grind Mode</div><div style="font-size:11px;color:var(--accent2);opacity:.7;margin-top:2px">Reset & repeat today's cards</div></div>
+    <div style="color:var(--accent2);font-size:16px">›</div>
+  </div>
+  <div class="fc-wrap" id="fc-wrap"></div>
+  <div class="fc-rating" id="fc-rating" style="display:none">
+    <button class="r-btn forgot" onclick="rateCard(0)">Forgot<div class="r-sub">Again</div></button>
+    <button class="r-btn hard" onclick="rateCard(1)">Hard<div class="r-sub">+1d</div></button>
+    <button class="r-btn good" onclick="rateCard(2)">Good<div class="r-sub">+3d</div></button>
+    <button class="r-btn easy" onclick="rateCard(3)">Easy<div class="r-sub">+7d</div></button>
+  </div>
+</div>
+
+<!-- LIBRARY -->
+<div id="library-screen" class="screen">
+  <div class="header">
+    <div class="header-label">Reference</div>
+    <div class="header-title">Library</div>
+    <div class="header-sub" id="lib-count-label">All N5 content</div>
+  </div>
+  <div class="lib-tabs">
+    <div class="lib-tab active" onclick="setLibTab('vocab')">Vocabulary</div>
+    <div class="lib-tab" onclick="setLibTab('kanji')">Kanji</div>
+    <div class="lib-tab" onclick="setLibTab('grammar')">Grammar</div>
+  </div>
+  <div class="lib-content">
+    <input class="lib-search" id="lib-search" placeholder="Search…" oninput="renderLibrary()" type="search">
+    <div class="lib-filter-row" id="lib-filters"></div>
+    <div id="lib-list"></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settings-screen" class="screen">
+  <div class="header">
+    <div class="header-label">Preferences</div>
+    <div class="header-title">Settings</div>
+  </div>
+  <div class="scroll-content">
+    <div class="settings-group">
+      <div class="sg-title">Daily Study</div>
+      <div class="setting-row">
+        <div><div class="setting-label">New cards per day</div><div class="setting-sub">How many new words daily</div></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="num-btn" onclick="adjLimit(-5)">−</button>
+          <input class="num-input" id="limit-input" type="number" value="10" min="1" max="100" onchange="saveLimit(this.value)">
+          <button class="num-btn" onclick="adjLimit(5)">+</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div><div class="setting-label">Day resets at</div><div class="setting-sub">New cards refresh after this hour</div></div>
+        <div style="font-size:15px;font-weight:600;font-family:var(--mono);color:var(--text)">4:00 AM</div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="sg-title">Progress</div>
+      <div class="setting-row"><div><div class="setting-label">Cards learned</div><div class="setting-sub">Unique words reviewed at least once</div></div><div style="font-size:20px;font-weight:600;font-family:var(--serif)" id="s-learned">0</div></div>
+      <div class="setting-row"><div><div class="setting-label">Level</div><div class="setting-sub">N4 unlocks at 80% N5 mastery</div></div><div style="font-size:15px;font-weight:600;color:var(--gold)" id="s-level">N5</div></div>
+      <div class="setting-row"><div><div class="setting-label">Vocabulary deck</div><div class="setting-sub">Total words in N5 deck</div></div><div style="font-size:15px;font-weight:600;color:var(--text)" id="s-deck">0</div></div>
+    </div>
+    <div class="settings-group">
+      <div class="sg-title">Reset Options</div>
+      <button class="danger-btn" onclick="showModal('today')">🔄 Reset Today's Session</button>
+      <button class="danger-btn" onclick="showModal('all')" style="opacity:.7">☢️ Reset All Progress</button>
+    </div>
+    <div style="font-size:12px;color:var(--text3);text-align:center;padding:8px 0 16px;line-height:1.8">
+      日本語 Study · N5 Complete Edition<br>Full offline · No API required · SM-2 SRS
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item active" id="nav-home" onclick="showScreen('home')"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></button>
+  <button class="nav-item" id="nav-study" onclick="startStudy()"><div class="nav-icon">🃏</div><div class="nav-label">Study</div></button>
+  <button class="nav-item" id="nav-library" onclick="showScreen('library')"><div class="nav-icon">📚</div><div class="nav-label">Library</div></button>
+  <button class="nav-item" id="nav-settings" onclick="showScreen('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
+</nav>
+
+<!-- MODAL -->
+<div class="modal-overlay hidden" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-btns" id="modal-btns"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA — N5 VOCABULARY (~120 core words with full content)
+// ═══════════════════════════════════════════════════════
+const VOCAB = [
+  // VERBS
+  {id:'taberu',w:'食べる',r:'たべる',pos:'verb-ru',cat:'daily',m:'to eat',ex:'毎日ご飯を食べます。',exen:'I eat rice every day.',tip:'食 means "food/eat" — imagine a person eating at a table 食'},
+  {id:'nomu',w:'飲む',r:'のむ',pos:'verb-u',cat:'daily',m:'to drink',ex:'水を飲みます。',exen:'I drink water.',tip:'飲 has the water radical 氵 — something you drink'},
+  {id:'iku',w:'行く',r:'いく',pos:'verb-u',cat:'movement',m:'to go',ex:'学校に行きます。',exen:'I go to school.',tip:'行 looks like a crossroads — you go somewhere'},
+  {id:'kuru',w:'来る',r:'くる',pos:'verb-irr',cat:'movement',m:'to come',ex:'友達が来ます。',exen:'My friend is coming.',tip:'Opposite of 行く — something comes toward you'},
+  {id:'kaeru',w:'帰る',r:'かえる',pos:'verb-u',cat:'movement',m:'to return home',ex:'家に帰ります。',exen:'I return home.',tip:'帰 contains 家 (home) — going back home'},
+  {id:'miru',w:'見る',r:'みる',pos:'verb-ru',cat:'daily',m:'to see / watch',ex:'テレビを見ます。',exen:'I watch TV.',tip:'見 shows an eye 目 on legs — the eye goes to see'},
+  {id:'kiku',w:'聞く',r:'きく',pos:'verb-u',cat:'daily',m:'to hear / listen / ask',ex:'音楽を聞きます。',exen:'I listen to music.',tip:'聞 has 耳 (ear) in it — you hear with your ear'},
+  {id:'hanasu',w:'話す',r:'はなす',pos:'verb-u',cat:'comm',m:'to speak / talk',ex:'日本語を話します。',exen:'I speak Japanese.',tip:'話 has 言 (word/say) — talking uses words'},
+  {id:'yomu',w:'読む',r:'よむ',pos:'verb-u',cat:'study',m:'to read',ex:'本を読みます。',exen:'I read a book.',tip:'読 has 言 (words) — reading is taking in words'},
+  {id:'kaku',w:'書く',r:'かく',pos:'verb-u',cat:'study',m:'to write',ex:'手紙を書きます。',exen:'I write a letter.',tip:'書 has a brush at the top — writing with a brush'},
+  {id:'suru',w:'する',r:'する',pos:'verb-irr',cat:'daily',m:'to do',ex:'勉強をします。',exen:'I study.',tip:'The most versatile verb — pairs with nouns to make verbs'},
+  {id:'aru',w:'ある',r:'ある',pos:'verb-u',cat:'exist',m:'to exist (things)',ex:'机の上に本があります。',exen:'There is a book on the desk.',tip:'ある = things that exist. いる = living things. Remember: A(ru) = Arrangement of objects'},
+  {id:'iru',w:'いる',r:'いる',pos:'verb-ru',cat:'exist',m:'to exist (people/animals)',ex:'部屋に猫がいます。',exen:'There is a cat in the room.',tip:'いる for living things — I and you are living, so いる'},
+  {id:'wakaru',w:'わかる',r:'わかる',pos:'verb-u',cat:'mind',m:'to understand',ex:'日本語がわかります。',exen:'I understand Japanese.',tip:'わかる takes が not を — you cannot "do" understanding'},
+  {id:'au',w:'会う',r:'あう',pos:'verb-u',cat:'social',m:'to meet',ex:'友達に会います。',exen:'I meet my friend.',tip:'会 shows two people facing each other — a meeting'},
+  {id:'kau',w:'買う',r:'かう',pos:'verb-u',cat:'daily',m:'to buy',ex:'野菜を買います。',exen:'I buy vegetables.',tip:'買 has 貝 (shell/money) — buying involves money'},
+  {id:'uru',w:'売る',r:'うる',pos:'verb-u',cat:'daily',m:'to sell',ex:'店で花を売っています。',exen:'They sell flowers at the shop.',tip:'Opposite of 買う (buy). 売 has a cross like a price tag'},
+  {id:'noru',w:'乗る',r:'のる',pos:'verb-u',cat:'transport',m:'to ride / board',ex:'電車に乗ります。',exen:'I ride the train.',tip:'乗 looks like someone climbing onto something'},
+  {id:'oriru',w:'降りる',r:'おりる',pos:'verb-ru',cat:'transport',m:'to get off',ex:'次の駅で降ります。',exen:'I get off at the next station.',tip:'Opposite of 乗る — going down from a vehicle'},
+  {id:'tsukuru',w:'作る',r:'つくる',pos:'verb-u',cat:'daily',m:'to make / create',ex:'料理を作ります。',exen:'I make food.',tip:'作 has 人 (person) with a tool — a person making something'},
+  {id:'oshieru',w:'教える',r:'おしえる',pos:'verb-ru',cat:'study',m:'to teach / tell',ex:'英語を教えます。',exen:'I teach English.',tip:'教 has a teacher with a stick instructing a student'},
+  {id:'narau',w:'習う',r:'ならう',pos:'verb-u',cat:'study',m:'to learn',ex:'日本語を習います。',exen:'I learn Japanese.',tip:'習 shows a bird learning to fly — practicing by repeating'},
+  {id:'asobu',w:'遊ぶ',r:'あそぶ',pos:'verb-u',cat:'leisure',m:'to play',ex:'公園で遊びます。',exen:'I play at the park.',tip:'Think of あそび — playtime and fun activities'},
+  {id:'yasumu',w:'休む',r:'やすむ',pos:'verb-u',cat:'daily',m:'to rest / be absent',ex:'今日は休みます。',exen:'I rest today.',tip:'休 shows a person (人) resting against a tree (木)'},
+  {id:'okiru',w:'起きる',r:'おきる',pos:'verb-ru',cat:'daily',m:'to wake up',ex:'7時に起きます。',exen:'I wake up at 7.',tip:'起 has a person rising — picture yourself rising from bed'},
+  {id:'neru',w:'寝る',r:'ねる',pos:'verb-ru',cat:'daily',m:'to sleep / lie down',ex:'11時に寝ます。',exen:'I sleep at 11.',tip:'Opposite of 起きる. ねる sounds like "nighty night"'},
+  {id:'kiru',w:'着る',r:'きる',pos:'verb-ru',cat:'daily',m:'to wear (upper body)',ex:'シャツを着ます。',exen:'I wear a shirt.',tip:'着 shows clothes on a person — wearing upper clothing'},
+  {id:'haku',w:'履く',r:'はく',pos:'verb-u',cat:'daily',m:'to wear (lower body/shoes)',ex:'靴を履きます。',exen:'I put on shoes.',tip:'履く is for shoes and pants — things you put your feet into'},
+  {id:'deru',w:'出る',r:'でる',pos:'verb-ru',cat:'movement',m:'to leave / come out',ex:'家を出ます。',exen:'I leave the house.',tip:'出 looks like a mountain peak breaking out — emerging out'},
+  {id:'hairu',w:'入る',r:'はいる',pos:'verb-u',cat:'movement',m:'to enter',ex:'部屋に入ります。',exen:'I enter the room.',tip:'入 looks like an arrow pointing inward — entering'},
+  {id:'aku',w:'開く',r:'あく',pos:'verb-u',cat:'daily',m:'to open',ex:'ドアが開きます。',exen:'The door opens.',tip:'開 shows two hands opening a gate — opening something'},
+  {id:'shimeru',w:'閉める',r:'しめる',pos:'verb-ru',cat:'daily',m:'to close',ex:'窓を閉めます。',exen:'I close the window.',tip:'閉 shows a gate being shut — closing something'},
+  {id:'tsuku',w:'着く',r:'つく',pos:'verb-u',cat:'movement',m:'to arrive',ex:'駅に着きます。',exen:'I arrive at the station.',tip:'着く (arrive) vs 着る (wear) — same kanji, different readings!'},
+  {id:'matsu',w:'待つ',r:'まつ',pos:'verb-u',cat:'daily',m:'to wait',ex:'バスを待ちます。',exen:'I wait for the bus.',tip:'待 has 彳 (walking) — someone stopped mid-walk to wait'},
+  {id:'toru',w:'取る',r:'とる',pos:'verb-u',cat:'daily',m:'to take / get',ex:'写真を取ります。',exen:'I take a photo.',tip:'取 shows a hand grabbing an ear — taking something'},
+  {id:'ageru',w:'あげる',r:'あげる',pos:'verb-ru',cat:'giving',m:'to give (to others)',ex:'花をあげます。',exen:'I give flowers.',tip:'あげる = UP — giving to others raises their happiness'},
+  {id:'morau',w:'もらう',r:'もらう',pos:'verb-u',cat:'giving',m:'to receive',ex:'プレゼントをもらいました。',exen:'I received a present.',tip:'もらう = receiving — the gift comes to you'},
+  {id:'kureru',w:'くれる',r:'くれる',pos:'verb-ru',cat:'giving',m:'to give (to me)',ex:'友達がケーキをくれました。',exen:'My friend gave me cake.',tip:'くれる = someone gives TO YOU specifically'},
+  {id:'isogu',w:'急ぐ',r:'いそぐ',pos:'verb-u',cat:'movement',m:'to hurry',ex:'急いでください。',exen:'Please hurry.',tip:'急 looks frantic with many strokes — showing urgency'},
+  {id:'benkyousuru',w:'勉強する',r:'べんきょうする',pos:'verb-irr',cat:'study',m:'to study',ex:'毎日日本語を勉強します。',exen:'I study Japanese every day.',tip:'勉強 = effort + strong — studying takes strong effort'},
+  // NOUNS - PEOPLE
+  {id:'watashi',w:'私',r:'わたし',pos:'noun',cat:'people',m:'I / me',ex:'私は学生です。',exen:'I am a student.',tip:'私 is formal. わたし is standard. あたし is feminine casual'},
+  {id:'anata',w:'あなた',r:'あなた',pos:'noun',cat:'people',m:'you',ex:'あなたの名前は何ですか？',exen:'What is your name?',tip:'In Japanese, using あなた can feel distant. Use the person\'s name instead when possible'},
+  {id:'kare',w:'彼',r:'かれ',pos:'noun',cat:'people',m:'he / boyfriend',ex:'彼は優しいです。',exen:'He is kind.',tip:'彼 = he OR boyfriend — context tells you which'},
+  {id:'kanojo',w:'彼女',r:'かのじょ',pos:'noun',cat:'people',m:'she / girlfriend',ex:'彼女は学生です。',exen:'She is a student.',tip:'彼女 = she OR girlfriend — same dual meaning as 彼'},
+  {id:'hito',w:'人',r:'ひと',pos:'noun',cat:'people',m:'person / people',ex:'あの人は先生です。',exen:'That person is a teacher.',tip:'人 looks like a person walking with two legs'},
+  {id:'tomodachi',w:'友達',r:'ともだち',pos:'noun',cat:'people',m:'friend',ex:'友達と映画を見ます。',exen:'I watch a movie with my friend.',tip:'友 = friend, 達 = plural suffix — friends (plural)'},
+  {id:'sensei',w:'先生',r:'せんせい',pos:'noun',cat:'people',m:'teacher',ex:'田中先生はとても親切です。',exen:'Teacher Tanaka is very kind.',tip:'先生 literally means "born before" — someone who was born (into knowledge) before you'},
+  {id:'gakusei',w:'学生',r:'がくせい',pos:'noun',cat:'people',m:'student',ex:'私は大学生です。',exen:'I am a university student.',tip:'学 = study, 生 = life/person — a studying person'},
+  {id:'kazoku',w:'家族',r:'かぞく',pos:'noun',cat:'people',m:'family',ex:'家族と夕食を食べます。',exen:'I eat dinner with my family.',tip:'家 = house, 族 = group — the group in the house'},
+  {id:'chichi',w:'父',r:'ちち',pos:'noun',cat:'family',m:'(my) father',ex:'父は医者です。',exen:'My father is a doctor.',tip:'父 is for YOUR father. お父さん is for someone else\'s father'},
+  {id:'haha',w:'母',r:'はは',pos:'noun',cat:'family',m:'(my) mother',ex:'母は料理が上手です。',exen:'My mother is good at cooking.',tip:'母 = MY mother. お母さん = someone else\'s mother or polite form'},
+  {id:'ani',w:'兄',r:'あに',pos:'noun',cat:'family',m:'(my) older brother',ex:'兄は大学生です。',exen:'My older brother is a university student.',tip:'兄 = MY older brother. お兄さん = someone else\'s older brother'},
+  {id:'ane',w:'姉',r:'あね',pos:'noun',cat:'family',m:'(my) older sister',ex:'姉は働いています。',exen:'My older sister is working.',tip:'姉 = MY older sister. お姉さん = someone else\'s older sister'},
+  {id:'otouto',w:'弟',r:'おとうと',pos:'noun',cat:'family',m:'younger brother',ex:'弟は高校生です。',exen:'My younger brother is a high school student.',tip:'弟 sounds like "oh, to-uto" — remember the younger sibling'},
+  {id:'imouto',w:'妹',r:'いもうと',pos:'noun',cat:'family',m:'younger sister',ex:'妹はかわいいです。',exen:'My younger sister is cute.',tip:'妹 contains 女 (woman) — younger female sibling'},
+  // NOUNS - TIME
+  {id:'ima',w:'今',r:'いま',pos:'noun',cat:'time',m:'now',ex:'今何時ですか？',exen:'What time is it now?',tip:'今 looks like a person trapped in the present moment'},
+  {id:'kyou',w:'今日',r:'きょう',pos:'noun',cat:'time',m:'today',ex:'今日は月曜日です。',exen:'Today is Monday.',tip:'今日 = now + day = today. Note: reads きょう not いまひ'},
+  {id:'ashita',w:'明日',r:'あした',pos:'noun',cat:'time',m:'tomorrow',ex:'明日また来てください。',exen:'Please come again tomorrow.',tip:'明 = bright (sun + moon) — bright new day ahead'},
+  {id:'kinou',w:'昨日',r:'きのう',pos:'noun',cat:'time',m:'yesterday',ex:'昨日映画を見ました。',exen:'I watched a movie yesterday.',tip:'昨 has a left-side radical meaning "past" — the day in the past'},
+  {id:'kotoshi',w:'今年',r:'ことし',pos:'noun',cat:'time',m:'this year',ex:'今年日本語を勉強します。',exen:'I am studying Japanese this year.',tip:'今 (now) + 年 (year) = this year. Simple combination!'},
+  {id:'rainen',w:'来年',r:'らいねん',pos:'noun',cat:'time',m:'next year',ex:'来年日本に行きます。',exen:'I will go to Japan next year.',tip:'来 (come) + 年 (year) = the year that comes = next year'},
+  {id:'mainen',w:'毎年',r:'まいねん',pos:'noun',cat:'time',m:'every year',ex:'毎年花見をします。',exen:'I do hanami every year.',tip:'毎 means "every" — 毎日 (every day), 毎週 (every week), 毎年 (every year)'},
+  {id:'mainichi',w:'毎日',r:'まいにち',pos:'noun',cat:'time',m:'every day',ex:'毎日運動します。',exen:'I exercise every day.',tip:'毎 (every) + 日 (day) = every day'},
+  {id:'maisa',w:'毎朝',r:'まいあさ',pos:'noun',cat:'time',m:'every morning',ex:'毎朝コーヒーを飲みます。',exen:'I drink coffee every morning.',tip:'毎 (every) + 朝 (morning) = every morning'},
+  {id:'asa',w:'朝',r:'あさ',pos:'noun',cat:'time',m:'morning',ex:'朝ごはんを食べます。',exen:'I eat breakfast.',tip:'朝 has 月 (moon setting) on the left — the moon is still there in early morning'},
+  {id:'hiru',w:'昼',r:'ひる',pos:'noun',cat:'time',m:'noon / daytime',ex:'昼ごはんを食べましょう。',exen:'Let\'s eat lunch.',tip:'昼 is the middle of the day — think "high-ru"'},
+  {id:'yoru',w:'夜',r:'よる',pos:'noun',cat:'time',m:'night',ex:'夜遅く寝ます。',exen:'I sleep late at night.',tip:'夜 looks dark with many strokes — like a dark night sky'},
+  {id:'ototoi',w:'おととい',r:'おととい',pos:'noun',cat:'time',m:'day before yesterday',ex:'おとといから熱があります。',exen:'I\'ve had a fever since the day before yesterday.',tip:'Day sequence: 一昨日→昨日→今日→明日→明後日'},
+  {id:'asatte',w:'明後日',r:'あさって',pos:'noun',cat:'time',m:'day after tomorrow',ex:'明後日試験があります。',exen:'I have an exam the day after tomorrow.',tip:'明日 (tomorrow) + after = the day after tomorrow'},
+  // NOUNS - PLACE
+  {id:'ie',w:'家',r:'いえ',pos:'noun',cat:'place',m:'house / home',ex:'家に帰ります。',exen:'I return home.',tip:'家 shows a pig under a roof — ancient homes kept pigs'},
+  {id:'gakkou',w:'学校',r:'がっこう',pos:'noun',cat:'place',m:'school',ex:'学校に行きます。',exen:'I go to school.',tip:'学 (study) + 校 (institution) = place of study'},
+  {id:'kaisha',w:'会社',r:'かいしゃ',pos:'noun',cat:'place',m:'company / office',ex:'父は会社に行きます。',exen:'My father goes to the company.',tip:'会 (meet) + 社 (organization) = where people meet to work'},
+  {id:'byouin',w:'病院',r:'びょういん',pos:'noun',cat:'place',m:'hospital',ex:'病院に行きます。',exen:'I go to the hospital.',tip:'病 (sick) + 院 (institution) = place for sick people'},
+  {id:'mise',w:'店',r:'みせ',pos:'noun',cat:'place',m:'shop / store',ex:'あの店は安いです。',exen:'That shop is cheap.',tip:'店 has a shed radical — shops used to be roadside sheds'},
+  {id:'resutoran',w:'レストラン',r:'レストラン',pos:'noun',cat:'place',m:'restaurant',ex:'レストランで食べます。',exen:'I eat at a restaurant.',tip:'From French "restaurant" — sounds just like it!'},
+  {id:'eki',w:'駅',r:'えき',pos:'noun',cat:'place',m:'station',ex:'駅まで歩きます。',exen:'I walk to the station.',tip:'駅 has the horse radical 馬 — horses were kept at old travel stations'},
+  {id:'kouen',w:'公園',r:'こうえん',pos:'noun',cat:'place',m:'park',ex:'公園で遊びます。',exen:'I play in the park.',tip:'公 (public) + 園 (garden) = public garden = park'},
+  {id:'toshokan',w:'図書館',r:'としょかん',pos:'noun',cat:'place',m:'library',ex:'図書館で本を読みます。',exen:'I read books at the library.',tip:'図書 (books/maps) + 館 (building) = building of books'},
+  {id:'yubinkyoku',w:'郵便局',r:'ゆうびんきょく',pos:'noun',cat:'place',m:'post office',ex:'郵便局で手紙を出します。',exen:'I send a letter at the post office.',tip:'郵便 (mail) + 局 (bureau/office) = mail office'},
+  {id:'ginkou',w:'銀行',r:'ぎんこう',pos:'noun',cat:'place',m:'bank',ex:'銀行でお金を引き出します。',exen:'I withdraw money from the bank.',tip:'銀 (silver) + 行 (go) = where silver (money) goes'},
+  // NOUNS - THINGS
+  {id:'hon',w:'本',r:'ほん',pos:'noun',cat:'thing',m:'book',ex:'この本はおもしろいです。',exen:'This book is interesting.',tip:'本 also means "origin/real" — the original written word'},
+  {id:'shimbun',w:'新聞',r:'しんぶん',pos:'noun',cat:'thing',m:'newspaper',ex:'毎朝新聞を読みます。',exen:'I read the newspaper every morning.',tip:'新 (new) + 聞 (hear) = hearing new things = newspaper'},
+  {id:'tegami',w:'手紙',r:'てがみ',pos:'noun',cat:'thing',m:'letter',ex:'母に手紙を書きます。',exen:'I write a letter to my mother.',tip:'手 (hand) + 紙 (paper) = hand paper = handwritten letter'},
+  {id:'okane',w:'お金',r:'おかね',pos:'noun',cat:'thing',m:'money',ex:'お金がありません。',exen:'I have no money.',tip:'お is honorific prefix. 金 = gold/money — money is precious like gold'},
+  {id:'kuruma',w:'車',r:'くるま',pos:'noun',cat:'transport',m:'car',ex:'車で行きます。',exen:'I go by car.',tip:'車 looks like a wheel with an axle — the ancient character for cart/car'},
+  {id:'densha',w:'電車',r:'でんしゃ',pos:'noun',cat:'transport',m:'train (electric)',ex:'電車で学校に行きます。',exen:'I go to school by train.',tip:'電 (electricity) + 車 (vehicle) = electric vehicle = electric train'},
+  {id:'jitensha',w:'自転車',r:'じてんしゃ',pos:'noun',cat:'transport',m:'bicycle',ex:'自転車で公園に行きます。',exen:'I go to the park by bicycle.',tip:'自転 (self-turning) + 車 (vehicle) = self-turning vehicle = bicycle'},
+  {id:'basu',w:'バス',r:'バス',pos:'noun',cat:'transport',m:'bus',ex:'バスで会社に行きます。',exen:'I go to the company by bus.',tip:'バス sounds exactly like "bus" in English'},
+  {id:'tabemono',w:'食べ物',r:'たべもの',pos:'noun',cat:'food',m:'food',ex:'日本の食べ物が好きです。',exen:'I like Japanese food.',tip:'食べ (eat) + 物 (thing) = eating thing = food'},
+  {id:'nomimono',w:'飲み物',r:'のみもの',pos:'noun',cat:'food',m:'drink / beverage',ex:'飲み物は何にしますか？',exen:'What would you like to drink?',tip:'飲み (drink) + 物 (thing) = drinking thing = beverage'},
+  {id:'mizu',w:'水',r:'みず',pos:'noun',cat:'food',m:'water',ex:'水を一杯ください。',exen:'Please give me a glass of water.',tip:'水 looks like flowing water with ripples'},
+  {id:'gohan',w:'ご飯',r:'ごはん',pos:'noun',cat:'food',m:'rice / meal',ex:'ご飯を食べましょう。',exen:'Let\'s eat (a meal).',tip:'ご is honorific. 飯 = cooked rice/food. ご飯 = rice or any meal'},
+  // ADJECTIVES - い
+  {id:'okii',w:'大きい',r:'おおきい',pos:'i-adj',cat:'size',m:'big / large',ex:'大きい犬が好きです。',exen:'I like big dogs.',tip:'大 = big — a person (人) with arms stretched wide saying "this big!"'},
+  {id:'chiisai',w:'小さい',r:'ちいさい',pos:'i-adj',cat:'size',m:'small / little',ex:'小さい猫がいます。',exen:'There is a small cat.',tip:'小 = small — a tiny mark between two lines'},
+  {id:'ookii',w:'多い',r:'おおい',pos:'i-adj',cat:'quant',m:'many / numerous',ex:'人が多いです。',exen:'There are many people.',tip:'多 = many — two 夕 (evening) stacked up, many evenings have passed'},
+  {id:'sukunai',w:'少ない',r:'すくない',pos:'i-adj',cat:'quant',m:'few / little',ex:'時間が少ないです。',exen:'There is little time.',tip:'少 = few/little — 小 (small) with one stroke removed'},
+  {id:'atarashii',w:'新しい',r:'あたらしい',pos:'i-adj',cat:'quality',m:'new',ex:'新しい車を買いました。',exen:'I bought a new car.',tip:'新 has 木 (tree) + 斤 (axe) + 辛 — cutting new wood = new'},
+  {id:'furui',w:'古い',r:'ふるい',pos:'i-adj',cat:'quality',m:'old (things)',ex:'古い本があります。',exen:'There is an old book.',tip:'古 = old — 十 (ten) + 口 (mouth) = ten mouths passed stories down'},
+  {id:'takai',w:'高い',r:'たかい',pos:'i-adj',cat:'price',m:'high / expensive / tall',ex:'この店は高いです。',exen:'This shop is expensive.',tip:'高 looks like a tall building or pagoda — tall/high/expensive'},
+  {id:'yasui',w:'安い',r:'やすい',pos:'i-adj',cat:'price',m:'cheap / inexpensive',ex:'この店は安いです。',exen:'This shop is cheap.',tip:'安 = safe/cheap — a woman under a roof is safe/at ease'},
+  {id:'ii',w:'いい',r:'いい',pos:'i-adj',cat:'quality',m:'good',ex:'今日はいい天気です。',exen:'It is good weather today.',tip:'いい = good. But conjugates as よい! よくない (not good), よかった (was good)'},
+  {id:'warui',w:'悪い',r:'わるい',pos:'i-adj',cat:'quality',m:'bad',ex:'今日は天気が悪いです。',exen:'The weather is bad today.',tip:'悪 = bad — look for 心 (heart) at the bottom — something that hurts the heart'},
+  {id:'hayai',w:'早い',r:'はやい',pos:'i-adj',cat:'speed',m:'early / fast (time)',ex:'今朝は早く起きました。',exen:'I woke up early this morning.',tip:'早 = early (time). 速い = fast (speed). Both read はやい — context decides'},
+  {id:'osoi',w:'遅い',r:'おそい',pos:'i-adj',cat:'speed',m:'slow / late',ex:'バスが遅いです。',exen:'The bus is slow.',tip:'遅 has the movement radical 辶 — slow movement'},
+  {id:'muzukashii',w:'難しい',r:'むずかしい',pos:'i-adj',cat:'difficulty',m:'difficult',ex:'日本語は難しいです。',exen:'Japanese is difficult.',tip:'難 has 隹 (bird) — catching a bird is difficult!'},
+  {id:'yasashii',w:'やさしい',r:'やさしい',pos:'i-adj',cat:'difficulty',m:'easy / gentle / kind',ex:'この問題はやさしいです。',exen:'This problem is easy.',tip:'やさしい means BOTH easy and gentle/kind — a gentle soul makes things easy'},
+  {id:'omoshiroi',w:'面白い',r:'おもしろい',pos:'i-adj',cat:'feeling',m:'interesting / funny',ex:'この映画は面白いです。',exen:'This movie is interesting.',tip:'面 (face) + 白 (white) = face going white with excitement/interest'},
+  {id:'tsumaranai',w:'つまらない',r:'つまらない',pos:'i-adj',cat:'feeling',m:'boring',ex:'この本はつまらないです。',exen:'This book is boring.',tip:'Opposite of 面白い. つまる = to be blocked — boredom blocks your enjoyment'},
+  {id:'atsui',w:'暑い',r:'あつい',pos:'i-adj',cat:'weather',m:'hot (weather)',ex:'今日は暑いです。',exen:'It is hot today.',tip:'暑い = hot weather (日 sun radical). 熱い = hot to touch (heat radical)'},
+  {id:'samui',w:'寒い',r:'さむい',pos:'i-adj',cat:'weather',m:'cold (weather)',ex:'冬は寒いです。',exen:'Winter is cold.',tip:'寒 has 氵 (water/ice) at the top — cold like ice'},
+  {id:'suzushii',w:'涼しい',r:'すずしい',pos:'i-adj',cat:'weather',m:'cool / refreshing',ex:'今日は涼しいです。',exen:'It is cool today.',tip:'涼 has 氵 (water) — cool like water on a hot day'},
+  {id:'furui2',w:'冷たい',r:'つめたい',pos:'i-adj',cat:'temp',m:'cold (to touch)',ex:'水が冷たいです。',exen:'The water is cold.',tip:'冷 has 氵 (water) — cold things feel like icy water to the touch'},
+  {id:'ureshii',w:'嬉しい',r:'うれしい',pos:'i-adj',cat:'feeling',m:'happy / glad',ex:'プレゼントをもらって嬉しいです。',exen:'I am happy to receive a present.',tip:'嬉 has 女 (woman) + joy — joy makes you feel feminine warmth'},
+  {id:'kanashii',w:'悲しい',r:'かなしい',pos:'i-adj',cat:'feeling',m:'sad',ex:'映画を見て悲しくなりました。',exen:'I became sad watching the movie.',tip:'悲 has 心 (heart) — sadness comes from the heart'},
+  {id:'kowai',w:'怖い',r:'こわい',pos:'i-adj',cat:'feeling',m:'scary / afraid',ex:'あの映画は怖いです。',exen:'That movie is scary.',tip:'怖 has 心 (heart) + ghost radical — something that scares your heart'},
+  // ADJECTIVES - な
+  {id:'suki',w:'好き',r:'すき',pos:'na-adj',cat:'feeling',m:'like / favorite',ex:'寿司が好きです。',exen:'I like sushi.',tip:'好 = woman + child — a mother loving her child = love/like'},
+  {id:'kirai',w:'嫌い',r:'きらい',pos:'na-adj',cat:'feeling',m:'dislike',ex:'ニンジンが嫌いです。',exen:'I dislike carrots.',tip:'Opposite of 好き. 嫌 has 女 (woman) — something distasteful'},
+  {id:'jouzu',w:'上手',r:'じょうず',pos:'na-adj',cat:'skill',m:'skilled / good at',ex:'日本語が上手ですね。',exen:'Your Japanese is good!',tip:'上手 = above + hand = hand above average = skilled'},
+  {id:'heta',w:'下手',r:'へた',pos:'na-adj',cat:'skill',m:'unskilled / bad at',ex:'料理が下手です。',exen:'I am bad at cooking.',tip:'下手 = below + hand = hand below average = unskilled'},
+  {id:'genki',w:'元気',r:'げんき',pos:'na-adj',cat:'health',m:'energetic / healthy',ex:'元気ですか？',exen:'How are you? (Are you healthy?)',tip:'元 (origin) + 気 (energy) = original energy = vitality'},
+  {id:'shizuka',w:'静か',r:'しずか',pos:'na-adj',cat:'quality',m:'quiet / calm',ex:'この図書館は静かです。',exen:'This library is quiet.',tip:'静 has 青 (blue/clear) — clear blue sky = calm and quiet'},
+  {id:'nigiyaka',w:'賑やか',r:'にぎやか',pos:'na-adj',cat:'quality',m:'lively / bustling',ex:'渋谷は賑やかです。',exen:'Shibuya is lively.',tip:'Opposite of 静か. Think of にぎやか sounds like busy chatter'},
+  {id:'kirei',w:'きれい',r:'きれい',pos:'na-adj',cat:'appearance',m:'beautiful / clean',ex:'この花はきれいです。',exen:'This flower is beautiful.',tip:'きれい means both beautiful and clean — beauty = cleanliness in Japanese culture'},
+  {id:'benri',w:'便利',r:'べんり',pos:'na-adj',cat:'quality',m:'convenient',ex:'このアプリはとても便利です。',exen:'This app is very convenient.',tip:'便 (convenient) + 利 (profit/benefit) = doubly beneficial'},
+  {id:'taisetsu',w:'大切',r:'たいせつ',pos:'na-adj',cat:'quality',m:'important / precious',ex:'時間は大切です。',exen:'Time is precious.',tip:'大 (big) + 切 (cut) = cutting something big = important matter'},
+  // QUESTION WORDS
+  {id:'nani',w:'何',r:'なに',pos:'pronoun',cat:'question',m:'what',ex:'これは何ですか？',exen:'What is this?',tip:'何 reads なに before consonants, なん before numbers and です'},
+  {id:'doko',w:'どこ',r:'どこ',pos:'pronoun',cat:'question',m:'where',ex:'トイレはどこですか？',exen:'Where is the toilet?',tip:'どこ sounds like "doh-ko" — where do you ko (go)?'},
+  {id:'itsu',w:'いつ',r:'いつ',pos:'pronoun',cat:'question',m:'when',ex:'いつ日本に行きますか？',exen:'When will you go to Japan?',tip:'いつ — when? Think "it\'s... when?"'},
+  {id:'dare',w:'誰',r:'だれ',pos:'pronoun',cat:'question',m:'who',ex:'あの人は誰ですか？',exen:'Who is that person?',tip:'誰 (dare) — sounds like you\'re daring to ask "who?"'},
+  {id:'naze',w:'なぜ',r:'なぜ',pos:'pronoun',cat:'question',m:'why',ex:'なぜ遅いですか？',exen:'Why are you late?',tip:'なぜ = why. Also どうして (more casual) and なぜなら = because'},
+  {id:'ikura',w:'いくら',r:'いくら',pos:'pronoun',cat:'question',m:'how much',ex:'これはいくらですか？',exen:'How much is this?',tip:'いくら also means "salmon roe" — how much does salmon roe cost?'},
+  {id:'ikutsu',w:'いくつ',r:'いくつ',pos:'pronoun',cat:'question',m:'how many / how old',ex:'りんごはいくつありますか？',exen:'How many apples are there?',tip:'いくつ for countable things AND age — "how many years old?"'},
+  {id:'dore',w:'どれ',r:'どれ',pos:'pronoun',cat:'question',m:'which one (of many)',ex:'どれが好きですか？',exen:'Which one do you like?',tip:'どれ (which of 3+) vs どちら (which of 2) vs どの+noun'},
+  {id:'dou',w:'どう',r:'どう',pos:'pronoun',cat:'question',m:'how / how about',ex:'日本語の勉強はどうですか？',exen:'How is your Japanese study?',tip:'どう + する = どうする (what to do). どうぞ = please/go ahead'},
+];
+
+// ═══════════════════════════════════════════════════════
+// DATA — N5 KANJI (103 characters)
+// ═══════════════════════════════════════════════════════
+const KANJI = [
+  // NUMBERS
+  {id:'k_ichi',k:'一',m:'one',on:'イチ、イツ',kun:'ひと-つ',stroke:1,ex:'一月 (いちがつ) January',tip:'A single horizontal stroke — 1 line = 1'},
+  {id:'k_ni',k:'二',m:'two',on:'ニ',kun:'ふた-つ',stroke:2,ex:'二月 (にがつ) February',tip:'Two horizontal strokes — 2 lines = 2'},
+  {id:'k_san',k:'三',m:'three',on:'サン',kun:'みっ-つ',stroke:3,ex:'三月 (さんがつ) March',tip:'Three horizontal strokes — 3 lines = 3'},
+  {id:'k_shi',k:'四',m:'four',on:'シ',kun:'よっ-つ、よ',stroke:5,ex:'四月 (しがつ) April',tip:'A window with two people inside — 4 sides of a window'},
+  {id:'k_go',k:'五',m:'five',on:'ゴ',kun:'いつ-つ',stroke:4,ex:'五月 (ごがつ) May',tip:'Looks like a figure with 5 joints — count the 5 points'},
+  {id:'k_roku',k:'六',m:'six',on:'ロク',kun:'むっ-つ',stroke:4,ex:'六月 (ろくがつ) June',tip:'Looks like a person with arms out — 6 letters in "person"'},
+  {id:'k_shichi',k:'七',m:'seven',on:'シチ',kun:'なな-つ、なな',stroke:2,ex:'七月 (しちがつ) July',tip:'Looks like a hooked line — the lucky number 7'},
+  {id:'k_hachi',k:'八',m:'eight',on:'ハチ',kun:'やっ-つ、や',stroke:2,ex:'八月 (はちがつ) August',tip:'Two strokes spreading out — like 8 spreading outward'},
+  {id:'k_ku',k:'九',m:'nine',on:'ク、キュウ',kun:'ここの-つ',stroke:2,ex:'九月 (くがつ) September',tip:'A hook turning at the end — almost at 10'},
+  {id:'k_juu',k:'十',m:'ten',on:'ジュウ、ジッ',kun:'とお、と',stroke:2,ex:'十月 (じゅうがつ) October',tip:'A cross + — horizontal and vertical = complete 10'},
+  {id:'k_hyaku',k:'百',m:'hundred',on:'ヒャク',kun:'—',stroke:6,ex:'百円 (ひゃくえん) 100 yen',tip:'白 (white) with a mark on top — a hundred white things'},
+  {id:'k_sen',k:'千',m:'thousand',on:'セン',kun:'ち',stroke:3,ex:'千円 (せんえん) 1000 yen',tip:'Looks like チ (katakana chi) — careful not to mix them up!'},
+  {id:'k_man',k:'万',m:'ten thousand',on:'マン、バン',kun:'—',stroke:3,ex:'一万円 (いちまんえん) 10,000 yen',tip:'A wide horizontal stroke — 万 is very common in Japanese prices'},
+  // TIME/CALENDAR
+  {id:'k_nichi',k:'日',m:'day / sun',on:'ニチ、ジツ',kun:'ひ、か',stroke:4,ex:'日曜日 (にちようび) Sunday',tip:'A box with a line — the sun (ancient drawing of the sun)'},
+  {id:'k_tsuki',k:'月',m:'month / moon',on:'ゲツ、ガツ',kun:'つき',stroke:4,ex:'月曜日 (げつようび) Monday',tip:'A crescent moon — the original moon character'},
+  {id:'k_ka',k:'火',m:'fire / Tuesday',on:'カ',kun:'ひ',stroke:4,ex:'火曜日 (かようび) Tuesday',tip:'A flame with sparks — fire radiating upward'},
+  {id:'k_sui',k:'水',m:'water / Wednesday',on:'スイ',kun:'みず',stroke:4,ex:'水曜日 (すいようび) Wednesday',tip:'Flowing water with ripples on each side'},
+  {id:'k_moku',k:'木',m:'tree / Thursday',on:'モク、ボク',kun:'き、こ',stroke:4,ex:'木曜日 (もくようび) Thursday',tip:'A tree with roots below and branches above'},
+  {id:'k_kin',k:'金',m:'gold / Friday / money',on:'キン、コン',kun:'かね、かな',stroke:8,ex:'金曜日 (きんようび) Friday',tip:'A person under a roof with two nuggets — gold under a roof'},
+  {id:'k_do',k:'土',m:'earth / Saturday',on:'ド、ト',kun:'つち',stroke:3,ex:'土曜日 (どようび) Saturday',tip:'A plant sprouting from the ground — earth/soil'},
+  {id:'k_nen',k:'年',m:'year',on:'ネン',kun:'とし',stroke:6,ex:'今年 (ことし) this year',tip:'A person (千) carrying grain (禾) — yearly harvest'},
+  {id:'k_ji',k:'時',m:'time / hour',on:'ジ',kun:'とき',stroke:10,ex:'三時 (さんじ) 3 o\'clock',tip:'日 (sun) + 寺 (temple) — temples rang bells to tell time'},
+  {id:'k_fun',k:'分',m:'minute / understand / part',on:'フン、ブン',kun:'わ-かる',stroke:4,ex:'十分 (じゅっぷん) 10 minutes',tip:'A knife (刀) dividing something — splitting/dividing time'},
+  {id:'k_han',k:'半',m:'half',on:'ハン',kun:'なか-ば',stroke:5,ex:'三時半 (さんじはん) 3:30',tip:'A horned animal split in half — half of something'},
+  {id:'k_mae',k:'前',m:'before / front',on:'ゼン',kun:'まえ',stroke:9,ex:'名前 (なまえ) name',tip:'A boat about to reach shore — the front/before position'},
+  {id:'k_go2',k:'後',m:'after / back',on:'ゴ、コウ',kun:'あと、うし-ろ',stroke:9,ex:'午後 (ごご) afternoon / PM',tip:'Taking small steps backward — the back/after position'},
+  // PEOPLE
+  {id:'k_hito',k:'人',m:'person',on:'ジン、ニン',kun:'ひと',stroke:2,ex:'日本人 (にほんじん) Japanese person',tip:'Two strokes like legs — a person walking'},
+  {id:'k_ko',k:'子',m:'child',on:'シ、ス',kun:'こ',stroke:3,ex:'子ども (こども) child',tip:'A baby with arms waving — a small child'},
+  {id:'k_jo',k:'女',m:'woman',on:'ジョ、ニョ',kun:'おんな',stroke:3,ex:'女の人 (おんなのひと) woman',tip:'A graceful figure with crossed legs — a woman'},
+  {id:'k_otoko',k:'男',m:'man',on:'ダン、ナン',kun:'おとこ',stroke:7,ex:'男の人 (おとこのひと) man',tip:'田 (rice field) + 力 (strength) — a man working the field with strength'},
+  {id:'k_sei',k:'生',m:'life / birth',on:'セイ、ショウ',kun:'い-きる、う-まれる',stroke:5,ex:'学生 (がくせい) student',tip:'A plant growing from the ground — sprouting life'},
+  {id:'k_sen2',k:'先',m:'ahead / first',on:'セン',kun:'さき',stroke:6,ex:'先生 (せんせい) teacher',tip:'A foot (先) going ahead — stepping forward first'},
+  // NATURE
+  {id:'k_yama',k:'山',m:'mountain',on:'サン',kun:'やま',stroke:3,ex:'富士山 (ふじさん) Mt. Fuji',tip:'Three peaks of a mountain — a perfect mountain silhouette'},
+  {id:'k_kawa',k:'川',m:'river',on:'セン',kun:'かわ',stroke:3,ex:'川 (かわ) river',tip:'Three vertical strokes like flowing water streams'},
+  {id:'k_ki',k:'木',m:'tree',on:'モク、ボク',kun:'き',stroke:4,ex:'木 (き) tree',tip:'A tree with trunk, branches above and roots below'},
+  {id:'k_hana',k:'花',m:'flower',on:'カ',kun:'はな',stroke:7,ex:'花 (はな) flower',tip:'草 (plant) + 化 (change) — a plant that transforms into beauty'},
+  {id:'k_sora',k:'空',m:'sky / empty',on:'クウ',kun:'そら、から',stroke:8,ex:'青空 (あおぞら) blue sky',tip:'A cave with a worker inside — the hollow space above us'},
+  {id:'k_ame',k:'雨',m:'rain',on:'ウ',kun:'あめ',stroke:8,ex:'雨 (あめ) rain',tip:'A cloud with raindrops falling beneath it'},
+  {id:'k_hi2',k:'火',m:'fire',on:'カ',kun:'ひ',stroke:4,ex:'火 (ひ) fire',tip:'Flames rising with sparks on both sides'},
+  // DIRECTIONS & LOCATIONS
+  {id:'k_naka',k:'中',m:'middle / inside',on:'チュウ',kun:'なか',stroke:4,ex:'中国 (ちゅうごく) China',tip:'A vertical line through the middle of a box — center'},
+  {id:'k_ue',k:'上',m:'above / up',on:'ジョウ、ショウ',kun:'うえ、あ-がる',stroke:3,ex:'上手 (じょうず) skilled',tip:'A line above a base line — pointing upward'},
+  {id:'k_shita',k:'下',m:'below / down',on:'カ、ゲ',kun:'した、さ-がる',stroke:3,ex:'下手 (へた) unskilled',tip:'A line below a base line — pointing downward'},
+  {id:'k_hidari',k:'左',m:'left',on:'サ',kun:'ひだり',stroke:5,ex:'左 (ひだり) left side',tip:'A hand (工) pointing left — hold your left hand up'},
+  {id:'k_migi',k:'右',m:'right',on:'ウ',kun:'みぎ',stroke:5,ex:'右 (みぎ) right side',tip:'A hand (工) pointing right — hold your right hand up'},
+  {id:'k_higashi',k:'東',m:'east',on:'トウ',kun:'ひがし',stroke:8,ex:'東京 (とうきょう) Tokyo',tip:'The sun (日) rising through a tree (木) — sun rises in the east'},
+  {id:'k_nishi',k:'西',m:'west',on:'セイ、サイ',kun:'にし',stroke:6,ex:'関西 (かんさい) Kansai region',tip:'A bird in a nest — birds nest when the sun sets in the west'},
+  {id:'k_minami',k:'南',m:'south',on:'ナン',kun:'みなみ',stroke:9,ex:'南 (みなみ) south',tip:'Warm south — picture palm trees and tropical warmth'},
+  {id:'k_kita',k:'北',m:'north',on:'ホク',kun:'きた',stroke:5,ex:'北海道 (ほっかいどう) Hokkaido',tip:'Two people back to back — cold north makes people huddle'},
+  // BODY & PEOPLE
+  {id:'k_me',k:'目',m:'eye',on:'モク、ボク',kun:'め',stroke:5,ex:'目 (め) eye',tip:'A vertical eye with a pupil — looks just like an eye!'},
+  {id:'k_mimi',k:'耳',m:'ear',on:'ジ',kun:'みみ',stroke:6,ex:'耳 (みみ) ear',tip:'A box with three lines — like the shape of a ear from the side'},
+  {id:'k_kuchi',k:'口',m:'mouth',on:'コウ、ク',kun:'くち',stroke:3,ex:'口 (くち) mouth',tip:'A simple square — the open mouth'},
+  {id:'k_te',k:'手',m:'hand',on:'シュ',kun:'て',stroke:4,ex:'手 (て) hand',tip:'Five fingers on a hand — count the strokes'},
+  {id:'k_ashi',k:'足',m:'foot / leg',on:'ソク',kun:'あし',stroke:7,ex:'足 (あし) foot/leg',tip:'A knee bending with a foot at the bottom'},
+  // SCHOOL & STUDY
+  {id:'k_gaku',k:'学',m:'study / learning',on:'ガク',kun:'まな-ぶ',stroke:8,ex:'学校 (がっこう) school',tip:'A child (子) under a roof learning — studying under a teacher'},
+  {id:'k_kou',k:'校',m:'school',on:'コウ',kun:'—',stroke:10,ex:'学校 (がっこう) school',tip:'木 (tree/wooden) + 交 (intersect) — a crossroads for learning'},
+  {id:'k_hon2',k:'本',m:'book / origin',on:'ホン',kun:'もと',stroke:5,ex:'本 (ほん) book',tip:'A tree (木) with a mark at the root — the origin/root'},
+  {id:'k_ji2',k:'字',m:'character / letter',on:'ジ',kun:'あざ',stroke:6,ex:'漢字 (かんじ) kanji',tip:'A child (子) under a roof — a child learning characters'},
+  {id:'k_bun',k:'文',m:'writing / sentence',on:'ブン、モン',kun:'ふみ',stroke:4,ex:'文字 (もじ) character/letter',tip:'A cross with a dot — like an old-style written character'},
+  // BODY / DAILY
+  {id:'k_mi',k:'見',m:'see / look',on:'ケン',kun:'み-る',stroke:7,ex:'見る (みる) to see',tip:'目 (eye) on legs — the eye going to see things'},
+  {id:'k_kiku2',k:'聞',m:'hear / listen',on:'ブン、モン',kun:'き-く',stroke:14,ex:'聞く (きく) to listen',tip:'耳 (ear) in a 門 (gate) — an ear at the gate listening'},
+  {id:'k_hanashi',k:'話',m:'talk / story',on:'ワ',kun:'はな-す',stroke:13,ex:'話す (はなす) to speak',tip:'言 (words) + 舌 (tongue) — talking uses your tongue and words'},
+  {id:'k_yom',k:'読',m:'read',on:'ドク、トク',kun:'よ-む',stroke:14,ex:'読む (よむ) to read',tip:'言 (words) + 売 (sell) — selling words = reading stories'},
+  {id:'k_kak',k:'書',m:'write',on:'ショ',kun:'か-く',stroke:10,ex:'書く (かく) to write',tip:'A brush at the top writing on paper (日) below'},
+  // FOOD & DAILY LIFE
+  {id:'k_shoku',k:'食',m:'eat / food',on:'ショク、ジキ',kun:'た-べる',stroke:9,ex:'食べる (たべる) to eat',tip:'A person 人 over a pot with rice — eating from a bowl'},
+  {id:'k_nomi',k:'飲',m:'drink',on:'イン',kun:'の-む',stroke:12,ex:'飲む (のむ) to drink',tip:'食 (eat) + 欠 (yawn) — yawning open to drink'},
+  // TRANSPORT & MOVEMENT
+  {id:'k_kuruma2',k:'車',m:'vehicle / car',on:'シャ',kun:'くるま',stroke:7,ex:'電車 (でんしゃ) train',tip:'Looks like a wheel seen from above with an axle'},
+  {id:'k_den',k:'電',m:'electricity',on:'デン',kun:'—',stroke:13,ex:'電車 (でんしゃ) electric train',tip:'雨 (rain) + 申 — lightning from rain clouds = electricity'},
+  {id:'k_eki2',k:'駅',m:'station',on:'エキ',kun:'—',stroke:14,ex:'駅 (えき) station',tip:'馬 (horse) + 睪 — old post stations kept horses for travel'},
+  // PLACES
+  {id:'k_kuni',k:'国',m:'country',on:'コク',kun:'くに',stroke:8,ex:'日本国 (にほんこく) Japan',tip:'A box with 玉 (jewel) inside — a treasured enclosed land'},
+  {id:'k_ie2',k:'家',m:'house / home',on:'カ、ケ',kun:'いえ、うち',stroke:10,ex:'家 (いえ) house',tip:'A pig (豕) under a roof — ancient homes kept pigs inside'},
+  {id:'k_kaisha2',k:'会',m:'meet / society',on:'カイ、エ',kun:'あ-う',stroke:6,ex:'会社 (かいしゃ) company',tip:'A gathering under a roof — people meeting together'},
+  // NATURE & COLORS
+  {id:'k_shiro',k:'白',m:'white',on:'ハク、ビャク',kun:'しろ、しら',stroke:5,ex:'白い (しろい) white',tip:'The sun (日) with a ray of light at the top — bright white light'},
+  {id:'k_kuro',k:'黒',m:'black',on:'コク',kun:'くろ',stroke:11,ex:'黒い (くろい) black',tip:'A blackened fire (炎) under a window — soot-blackened'},
+  {id:'k_aka',k:'赤',m:'red',on:'セキ、シャク',kun:'あか',stroke:7,ex:'赤い (あかい) red',tip:'大 (big) + 火 (fire) — big fire = red'},
+  {id:'k_ao',k:'青',m:'blue / green',on:'セイ、ショウ',kun:'あお',stroke:8,ex:'青い (あおい) blue',tip:'生 (life) + 月 (moon) — the blue-green color of growing life'},
+  // MONEY
+  {id:'k_en',k:'円',m:'yen / circle',on:'エン',kun:'まる-い',stroke:4,ex:'百円 (ひゃくえん) 100 yen',tip:'A circle with a stroke — coins are round like circles'},
+  // KANJI REMAINING (numbers & common)
+  {id:'k_sei2',k:'正',m:'correct / right',on:'セイ、ショウ',kun:'ただ-しい',stroke:5,ex:'正しい (ただしい) correct',tip:'A foot (止) stepping toward a goal (一) — going straight/correct'},
+  {id:'k_oo',k:'大',m:'big / large',on:'ダイ、タイ',kun:'おお-きい',stroke:3,ex:'大きい (おおきい) big',tip:'A person with arms stretched wide — THIS BIG!'},
+  {id:'k_shou',k:'小',m:'small',on:'ショウ',kun:'ちい-さい、こ',stroke:3,ex:'小さい (ちいさい) small',tip:'A small mark between two lines — something tiny in the middle'},
+  {id:'k_chuu',k:'中',m:'middle',on:'チュウ',kun:'なか',stroke:4,ex:'中 (なか) inside/middle',tip:'A line through the middle of a box — exactly centered'},
+  {id:'k_takai',k:'高',m:'tall / high / expensive',on:'コウ',kun:'たか-い',stroke:10,ex:'高い (たかい) expensive',tip:'A tall tower or pagoda — reaching high into the sky'},
+  {id:'k_yasu',k:'安',m:'cheap / safe / peaceful',on:'アン',kun:'やす-い',stroke:6,ex:'安い (やすい) cheap',tip:'A woman (女) under a roof (宀) — safe and at peace at home'},
+  {id:'k_atarashii',k:'新',m:'new',on:'シン',kun:'あたら-しい',stroke:13,ex:'新しい (あたらしい) new',tip:'Axe (斤) cutting wood (木) + 辛 — freshly cut wood is new'},
+  {id:'k_furui3',k:'古',m:'old',on:'コ',kun:'ふる-い',stroke:5,ex:'古い (ふるい) old',tip:'Ten (十) mouths (口) — stories passed through 10 generations = old'},
+  {id:'k_nagasai',k:'長',m:'long / chief',on:'チョウ',kun:'なが-い',stroke:8,ex:'長い (ながい) long',tip:'Long flowing hair — long hair = long'},
+  {id:'k_yasui3',k:'休',m:'rest',on:'キュウ',kun:'やす-む',stroke:6,ex:'休む (やすむ) to rest',tip:'A person (人) leaning against a tree (木) — resting in the shade'},
+  {id:'k_deru2',k:'出',m:'exit / come out',on:'シュツ、スイ',kun:'で-る',stroke:5,ex:'出る (でる) to exit',tip:'Two mountain peaks — emerging up and out like a mountain'},
+  {id:'k_hairu2',k:'入',m:'enter',on:'ニュウ',kun:'はい-る',stroke:2,ex:'入る (はいる) to enter',tip:'An arrow pointing downward and inward — entering'},
+  {id:'k_kuru2',k:'来',m:'come',on:'ライ',kun:'く-る',stroke:7,ex:'来る (くる) to come',tip:'A person (人) in a wheat field (木) — someone coming through fields'},
+  {id:'k_iku2',k:'行',m:'go',on:'コウ、ギョウ',kun:'い-く、おこな-う',stroke:6,ex:'行く (いく) to go',tip:'Two footsteps at a crossroads — going in a direction'},
+  {id:'k_kaeru2',k:'帰',m:'return',on:'キ',kun:'かえ-る',stroke:10,ex:'帰る (かえる) to return home',tip:'A broom sweeping toward home — returning to sweep clean'},
+  {id:'k_mi2',k:'右',m:'right',on:'ウ、ユウ',kun:'みぎ',stroke:5,ex:'右 (みぎ) right direction',tip:'A hand working on the right side — your right hand'},
+  {id:'k_kotoba',k:'語',m:'language / word',on:'ゴ',kun:'かた-る',stroke:14,ex:'日本語 (にほんご) Japanese language',tip:'言 (speech) + 吾 (I/me) — my speech = my language'},
+  {id:'k_nihon',k:'本',m:'Japan (origin) / book',on:'ホン',kun:'もと',stroke:5,ex:'日本 (にほん) Japan',tip:'A mark at the root of a tree — the origin/base'},
+  {id:'k_kyou2',k:'今',m:'now',on:'コン、キン',kun:'いま',stroke:4,ex:'今日 (きょう) today',tip:'A person under a cover — caught in the present moment'},
+  {id:'k_zen',k:'前',m:'before / front',on:'ゼン',kun:'まえ',stroke:9,ex:'午前 (ごぜん) AM/morning',tip:'A boat approaching shore — the front, before you arrive'},
+  {id:'k_chichi2',k:'父',m:'father',on:'フ',kun:'ちち',stroke:4,ex:'父 (ちち) my father',tip:'Two hands with a stick — a father figure wielding authority'},
+  {id:'k_haha2',k:'母',m:'mother',on:'ボ',kun:'はは',stroke:5,ex:'母 (はは) my mother',tip:'女 (woman) with two dots for nursing — a nurturing mother'},
+];
+
+// ═══════════════════════════════════════════════════════
+// DATA — N5 GRAMMAR (80 points)
+// ═══════════════════════════════════════════════════════
+const GRAMMAR = [
+  // PARTICLES
+  {id:'g_wa',p:'は',title:'は (wa) — topic marker',when:'Marks the topic of the sentence. What you\'re talking about.',pattern:'[Topic] は [Comment]',formal:'both',ex:'私は学生です。',exen:'I am a student.',ex2:'これは本です。',ex2en:'This is a book.',note:'は can replace が or を to add emphasis or contrast.'},
+  {id:'g_ga',p:'が',title:'が (ga) — subject marker',when:'Marks the grammatical subject. Used for new information, emphasis, and with certain verbs like 好き, わかる, ある, いる.',pattern:'[Subject] が [Verb/Adjective]',formal:'both',ex:'猫がいます。',exen:'There is a cat.',ex2:'日本語がわかります。',ex2en:'I understand Japanese.',note:'は vs が: は = topic (known info), が = subject (new/emphatic info)'},
+  {id:'g_wo',p:'を',title:'を (wo) — object marker',when:'Marks the direct object of a verb. Used after the thing being acted upon.',pattern:'[Object] を [Verb]',formal:'both',ex:'ご飯を食べます。',exen:'I eat rice.',ex2:'音楽を聴きます。',ex2en:'I listen to music.',note:'を is always written を but pronounced "o" in modern Japanese'},
+  {id:'g_ni',p:'に',title:'に (ni) — direction / time / location',when:'1) Direction of movement 2) Time/when 3) Location of existence 4) Indirect object',pattern:'[Place] に 行く/来る/帰る | [Time] に',formal:'both',ex:'学校に行きます。',exen:'I go to school.',ex2:'3時に起きます。',ex2en:'I wake up at 3 o\'clock.',note:'で = where action happens. に = where something exists or where you go to'},
+  {id:'g_de',p:'で',title:'で (de) — location of action / means / reason',when:'1) Where an action takes place 2) By means of (tool/method) 3) Made of/with',pattern:'[Place] で [Action Verb]',formal:'both',ex:'図書館で勉強します。',exen:'I study at the library.',ex2:'バスで行きます。',ex2en:'I go by bus.',note:'に vs で: 猫が公園にいます (cat EXISTS in park) vs 公園で遊びます (play IN park)'},
+  {id:'g_no',p:'の',title:'の (no) — possessive / noun connector',when:'1) Possession (like apostrophe-s) 2) Connecting two nouns 3) Nominalizer (turning verb into noun)',pattern:'[Noun1] の [Noun2]',formal:'both',ex:'私の本です。',exen:'It is my book.',ex2:'日本語の先生',ex2en:'Japanese language teacher',note:'の can also nominalize: 食べるのが好き (I like eating)'},
+  {id:'g_to',p:'と',title:'と (to) — and (exhaustive) / with',when:'1) List all items in a group (exhaustive "and") 2) Together with someone',pattern:'[Noun1] と [Noun2] | [Person] と [Verb]',formal:'both',ex:'りんごとみかんを買いました。',exen:'I bought apples and oranges.',ex2:'友達と映画を見ます。',ex2en:'I watch a movie with my friend.',note:'と (complete list) vs や (partial list, "and so on")'},
+  {id:'g_ya',p:'や',title:'や (ya) — and (partial list)',when:'Lists some examples, implying there are more (like "and so on" or "such as")',pattern:'[Noun1] や [Noun2] など',formal:'both',ex:'本やノートを買いました。',exen:'I bought books and notebooks (and other things).',ex2:'寿司やラーメンなどが好きです。',ex2en:'I like things like sushi and ramen.',note:'Add など after the last item to emphasize "and so on"'},
+  {id:'g_mo',p:'も',title:'も (mo) — also / too / even',when:'Replaces は, が, or を to mean "also/too". After negative = "either".',pattern:'[Topic] も [Same thing as before]',formal:'both',ex:'私も学生です。',exen:'I am also a student.',ex2:'日本語も中国語も話せます。',ex2en:'I can speak both Japanese and Chinese.',note:'も+も = both...and... / も+negative = neither...nor...'},
+  {id:'g_ka',p:'か',title:'か (ka) — question marker',when:'Added to end of sentence to make it a question. No need to change word order.',pattern:'[Sentence] か？',formal:'both',ex:'これは本ですか？',exen:'Is this a book?',ex2:'どこに行きますか？',ex2en:'Where are you going?',note:'In casual speech, か is sometimes dropped and rising intonation is used instead'},
+  {id:'g_ne',p:'ね',title:'ね (ne) — seeking agreement',when:'Added at end to seek confirmation or agreement. Like "right?" or "isn\'t it?"',pattern:'[Sentence] ね',formal:'both',ex:'いい天気ですね。',exen:'It\'s nice weather, isn\'t it?',ex2:'日本語は難しいですね。',ex2en:'Japanese is difficult, isn\'t it?',note:'ね = seeking agreement. よ = asserting new info to listener'},
+  {id:'g_yo',p:'よ',title:'よ (yo) — asserting information',when:'Added at end to assert something the listener may not know. Like "I\'m telling you!"',pattern:'[Sentence] よ',formal:'both',ex:'これはおいしいですよ。',exen:'This is delicious (I\'m telling you)!',ex2:'もう8時ですよ。',ex2en:'It\'s already 8 o\'clock!',note:'ね (agree?) vs よ (I tell you). ねよ = asserting and seeking confirmation'},
+  {id:'g_he',p:'へ',title:'へ (e) — direction',when:'Shows direction of movement. Similar to に but more about the direction than the destination.',pattern:'[Direction] へ 行く/来る/帰る',formal:'both',ex:'日本へ行きます。',exen:'I go to/toward Japan.',ex2:'右へ曲がってください。',ex2en:'Please turn to the right.',note:'へ vs に: に = specific destination, へ = general direction (interchangeable in most cases)'},
+  {id:'g_kara',p:'から',title:'から (kara) — from / because',when:'1) Starting point in time or place 2) Reason/because (at end of clause)',pattern:'[Place/Time] から | [Reason] から',formal:'both',ex:'9時から勉強します。',exen:'I study from 9 o\'clock.',ex2:'寒いから、コートを着ます。',ex2en:'Because it\'s cold, I wear a coat.',note:'から (from) and まで (until) are often paired together'},
+  {id:'g_made',p:'まで',title:'まで (made) — until / as far as',when:'Indicates endpoint in time or place.',pattern:'[Time/Place] まで',formal:'both',ex:'5時まで働きます。',exen:'I work until 5 o\'clock.',ex2:'駅まで歩きます。',ex2en:'I walk to the station.',note:'から～まで = from...until... 駅から学校まで (from station to school)'},
+  // VERBS & CONJUGATION
+  {id:'g_masu',p:'～ます',title:'～ます — polite present/future',when:'Polite form of verbs. Used in formal situations and with strangers.',pattern:'[Verb stem] + ます',formal:'polite',ex:'毎日学校に行きます。',exen:'I go to school every day.',ex2:'明日雨が降ります。',ex2en:'It will rain tomorrow.',note:'ます (present/future), ました (past), ません (negative), ませんでした (past negative)'},
+  {id:'g_desu',p:'だ / です',title:'だ / です — to be (copula)',when:'Links nouns and な-adjectives. です is polite, だ is plain.',pattern:'[Noun/な-adj] + です',formal:'both',ex:'私は学生です。',exen:'I am a student.',ex2:'今日は月曜日です。',ex2en:'Today is Monday.',note:'Negative: ～ではありません. Past: ～でした. Plain: だ (casual)'},
+  {id:'g_te',p:'～て',title:'～て form — connecting / requesting',when:'1) Connect multiple actions 2) Make requests with ください 3) Various grammar patterns',pattern:'[Verb て-form] + ください/います/etc.',formal:'both',ex:'起きて、シャワーを浴びて、学校に行きます。',exen:'I wake up, take a shower, and go to school.',ex2:'ここに座ってください。',ex2en:'Please sit here.',note:'て-form rules: る-verb → remove る+て. う-verb changes: く→いて, ぐ→いで, す→して etc.'},
+  {id:'g_nai',p:'～ない',title:'～ない — plain negative',when:'Negative form of verbs in plain/casual speech.',pattern:'[Verb ない-form]',formal:'casual',ex:'今日は学校に行かない。',exen:'I\'m not going to school today.',ex2:'お酒を飲まない。',ex2en:'I don\'t drink alcohol.',note:'Polite negative: ～ません. ない-form + で = without doing: 食べないで (without eating)'},
+  {id:'g_ta',p:'～た',title:'～た — plain past tense',when:'Past tense in plain/casual speech. Same form as て but with た.',pattern:'[Verb た-form]',formal:'casual',ex:'昨日映画を見た。',exen:'I watched a movie yesterday.',ex2:'ご飯を食べた。',ex2en:'I ate rice.',note:'Polite past: ～ました. た-form used in many grammar patterns like たことがある, たら etc.'},
+  {id:'g_teiru',p:'～ている',title:'～ている — ongoing action / state',when:'1) Action currently in progress (I am doing) 2) Resulting state (I have done)',pattern:'[Verb て-form] + いる',formal:'both',ex:'今ご飯を食べています。',exen:'I am eating right now.',ex2:'結婚しています。',ex2en:'I am married.',note:'Casual: ～てる (drop the い). テレビを見ている = watching TV (ongoing)'},
+  {id:'g_mitemiru',p:'～てみる',title:'～てみる — try doing',when:'Try doing something (to see what it\'s like)',pattern:'[Verb て-form] + みる',formal:'both',ex:'日本料理を食べてみます。',exen:'I\'ll try eating Japanese food.',ex2:'着てみてください。',ex2en:'Please try it on.',note:'みる literally means "to see" — try and see what happens'},
+  // ADJECTIVES
+  {id:'g_iadj',p:'い-adjective',title:'い-adjectives',when:'Adjectives that end in い. Conjugate differently from な-adjectives.',pattern:'[い-adj] + noun | [い-adj] + です',formal:'both',ex:'大きい犬がいます。',exen:'There is a big dog.',ex2:'この本は面白いです。',ex2en:'This book is interesting.',note:'Past: ～かった. Negative: ～くない. て-form: ～くて. Exception: いい → よく (neg/adverb)'},
+  {id:'g_naadj',p:'な-adjective',title:'な-adjectives',when:'Adjectives that need な before a noun. Conjugate like nouns.',pattern:'[な-adj] な + noun | [な-adj] + です',formal:'both',ex:'静かな図書館です。',exen:'It is a quiet library.',ex2:'元気ですか？',ex2en:'Are you well?',note:'Past: でした. Negative: ではありません. て-form: で. な-adj drop な before です'},
+  // USEFUL PATTERNS
+  {id:'g_desuka',p:'～ませんか',title:'～ませんか — invitation',when:'Politely invite or suggest doing something together.',pattern:'[Verb stem] + ませんか',formal:'polite',ex:'一緒に食べませんか？',exen:'Won\'t you eat with me?',ex2:'映画を見ませんか？',ex2en:'Shall we watch a movie?',note:'ましょう = let\'s (I suggest). ませんか = won\'t you join me? (more polite)'},
+  {id:'g_mashou',p:'～ましょう',title:'～ましょう — let\'s',when:'Suggest doing something together. More assertive than ませんか.',pattern:'[Verb stem] + ましょう',formal:'polite',ex:'一緒に行きましょう！',exen:'Let\'s go together!',ex2:'始めましょう。',ex2en:'Let\'s begin.',note:'ましょうか = shall we? (seeking input). ましょう = let\'s! (assertive)'},
+  {id:'g_kudasai',p:'～てください',title:'～てください — please do',when:'Politely ask or instruct someone to do something.',pattern:'[Verb て-form] + ください',formal:'polite',ex:'ここに座ってください。',exen:'Please sit here.',ex2:'ゆっくり話してください。',ex2en:'Please speak slowly.',note:'More direct: ～て (casual request). More polite: ～ていただけませんか'},
+  {id:'g_naide',p:'～ないでください',title:'～ないでください — please don\'t',when:'Politely ask someone NOT to do something.',pattern:'[Verb ない-form] + でください',formal:'polite',ex:'ここで写真を撮らないでください。',exen:'Please don\'t take photos here.',ex2:'遅れないでください。',ex2en:'Please don\'t be late.',note:'Plain casual: ～ないで. Even more polite: ～ないでいただけますか'},
+  {id:'g_tai',p:'～たい',title:'～たい — want to do',when:'Express your desire to do something.',pattern:'[Verb stem] + たい',formal:'both',ex:'日本に行きたいです。',exen:'I want to go to Japan.',ex2:'寿司を食べたいです。',ex2en:'I want to eat sushi.',note:'たい conjugates like い-adj: たくない (don\'t want), たかった (wanted). Use for YOUR desires only'},
+  {id:'g_hoshii',p:'～が欲しい',title:'～が欲しい — want (a thing)',when:'Express desire for a noun/thing. Different from たい (which is for actions).',pattern:'[Noun] が 欲しい',formal:'both',ex:'新しいパソコンが欲しいです。',exen:'I want a new computer.',ex2:'時間が欲しいです。',ex2en:'I want time.',note:'欲しい is for things (nouns). Use たい for actions (verbs). Both are only for YOUR desires'},
+  {id:'g_koto',p:'～ことができる',title:'～ことができる — can do',when:'Express ability to do something.',pattern:'[Verb dictionary form] + ことができる',formal:'both',ex:'日本語を話すことができます。',exen:'I can speak Japanese.',ex2:'ピアノを弾くことができます。',ex2en:'I can play piano.',note:'Shorter: Potential verb form (話せる). ことができる is more formal'},
+  {id:'g_kotogaaru',p:'～ことがある',title:'～ことがある — have experience',when:'Express that you have (or haven\'t) experienced something.',pattern:'[Verb た-form] + ことがある',formal:'both',ex:'日本に行ったことがあります。',exen:'I have been to Japan.',ex2:'お酒を飲んだことがありません。',ex2en:'I have never drunk alcohol.',note:'Use た-form + ことがある. Negative experience: ～ことがない/ありません'},
+  {id:'g_ndesu',p:'～んです',title:'～んです — explanation/emphasis',when:'Explain a reason or add nuance. Often used when explaining a situation.',pattern:'[Plain form] + んです',formal:'both',ex:'頭が痛いんです。',exen:'(The thing is) I have a headache.',ex2:'どうしたんですか？',ex2en:'What happened? (What\'s going on?)',note:'んです = のです (formal). Used when giving or asking for context/explanation'},
+  {id:'g_kara2',p:'～から — because',title:'～から — because / so',when:'State a reason. The reason comes first, followed by から.',pattern:'[Reason] から、[Result]',formal:'both',ex:'眠いから、早く寝ます。',exen:'Because I\'m sleepy, I\'ll sleep early.',ex2:'雨が降っているから、傘を持ってください。',ex2en:'Because it\'s raining, please take an umbrella.',note:'ので is softer/more formal than から. Both mean "because"'},
+  {id:'g_ga2',p:'～が — but / however',title:'～が — but (conjunction)',when:'Connect two contrasting clauses. Softer contrast than でも.',pattern:'[Clause 1] が、[Clause 2]',formal:'both',ex:'日本語は難しいですが、楽しいです。',exen:'Japanese is difficult, but it\'s fun.',ex2:'行きたいですが、時間がありません。',ex2en:'I want to go, but I don\'t have time.',note:'が (soft contrast) vs でも (but - stronger) vs けど (casual but)'},
+  {id:'g_demo',p:'でも',title:'でも — but / however',when:'Introduces a contrasting idea. Stronger than が. Can start a new sentence.',pattern:'[Sentence.] でも、[Contrasting sentence]',formal:'both',ex:'疲れています。でも、頑張ります。',exen:'I\'m tired. But I\'ll do my best.',ex2:'雨が降っています。でも、行きます。',ex2en:'It\'s raining. But I\'ll go.',note:'でも can start a new sentence. が connects within one sentence'},
+  {id:'g_soshite',p:'そして',title:'そして — and then',when:'Connects two sentences or actions in sequence.',pattern:'[Action 1.] そして、[Action 2]',formal:'both',ex:'起きます。そして、朝ごはんを食べます。',exen:'I wake up. And then I eat breakfast.',ex2:'日本語を勉強します。そして、日本に行きます。',ex2en:'I study Japanese. And then I go to Japan.',note:'そして (and then) vs それから (after that) — similar, それから emphasizes sequence'},
+  {id:'g_dewa',p:'では / じゃ',title:'では / じゃ — well then / in that case',when:'Transition phrase. Concluding a topic or moving to next point.',pattern:'では、[Next action/statement]',formal:'both',ex:'では、始めましょう。',exen:'Well then, let\'s begin.',ex2:'じゃ、またね。',ex2en:'Well then, see you later.',note:'では is formal. じゃ is casual. Both mean "well then" or "in that case"'},
+  {id:'g_dono',p:'この / その / あの / どの',title:'この/その/あの/どの — this/that/which',when:'Demonstrate proximity. この = near me. その = near you. あの = far from both. どの = which.',pattern:'[この/その/あの/どの] + Noun',formal:'both',ex:'この本はおもしろいです。',exen:'This book is interesting.',ex2:'あの人は誰ですか？',ex2en:'Who is that person?',note:'Same series: ここ/そこ/あそこ/どこ (here/there/over there/where)'},
+  {id:'g_dore',p:'これ / それ / あれ / どれ',title:'これ/それ/あれ/どれ — this/that/which one',when:'Standalone pronouns. これ = this thing. それ = that thing (near you). あれ = that thing (far). どれ = which?',pattern:'[これ/それ/あれ/どれ] は [Noun] ですか',formal:'both',ex:'これは何ですか？',exen:'What is this?',ex2:'どれが好きですか？',ex2en:'Which one do you like?',note:'Use この/その/あの + noun (adjective role). Use これ/それ/あれ alone (pronoun role)'},
+  {id:'g_iiadjconj',p:'～くて (い-adj)',title:'い-adj ～くて — connecting adjectives',when:'Connect multiple い-adjectives, or use an adjective as a reason.',pattern:'[い-adj stem] + くて + [next clause]',formal:'both',ex:'この店は安くておいしいです。',exen:'This shop is cheap and delicious.',ex2:'寒くて、外に出たくないです。',ex2en:'It\'s cold, so I don\'t want to go outside.',note:'い-adj て-form: い → くて. Exception: いい → よくて'},
+  {id:'g_naadj_de',p:'～で (な-adj)',title:'な-adj ～で — connecting adjectives',when:'Connect multiple な-adjectives or clauses using で.',pattern:'[な-adj] で + [next clause]',formal:'both',ex:'静かできれいな公園です。',exen:'It is a quiet and beautiful park.',ex2:'元気で、よかったです。',ex2en:'I\'m glad you are well.',note:'な-adj て-form = で. 元気 → 元気で. Same as noun て-form.'},
+  {id:'g_yori',p:'より',title:'より — more than (comparison)',when:'Compare two things. A is more (adjective) than B.',pattern:'[B] より [A] の方が [Adjective]',formal:'both',ex:'電車よりバスの方が安いです。',exen:'The bus is cheaper than the train.',ex2:'夏より冬の方が好きです。',ex2en:'I like winter more than summer.',note:'B より A の方が adj = A is more adj than B'},
+  {id:'g_ichiban',p:'いちばん',title:'一番 — most / number one',when:'Superlative — the most (adjective) of all.',pattern:'[Group] の中で、[Noun] が 一番 [Adjective]',formal:'both',ex:'クラスで一番背が高いです。',exen:'I am the tallest in the class.',ex2:'日本料理の中で寿司が一番好きです。',ex2en:'I like sushi the most among Japanese food.',note:'の中で narrows the group. 一番 (most) = superlative marker'},
+  {id:'g_toki',p:'～とき',title:'～とき — when / at the time of',when:'Express "when [something happens]".',pattern:'[Clause] とき、[Main clause]',formal:'both',ex:'子どものとき、よく泳ぎました。',exen:'When I was a child, I swam often.',ex2:'日本に行くとき、お土産を買います。',ex2en:'When I go to Japan, I\'ll buy souvenirs.',note:'Dictionary form + とき (future/habitual). た-form + とき (past completed action)'},
+  {id:'g_mae',p:'～前に',title:'～前に — before doing',when:'Express "before doing something".',pattern:'[Verb dictionary form] 前に、[Main action]',formal:'both',ex:'寝る前に歯を磨きます。',exen:'I brush my teeth before sleeping.',ex2:'食事の前に手を洗います。',ex2en:'I wash my hands before eating.',note:'Verb dictionary form + 前に. Noun + の + 前に'},
+  {id:'g_ato',p:'～後で',title:'～後で — after doing',when:'Express "after doing something".',pattern:'[Verb た-form] 後で、[Main action]',formal:'both',ex:'宿題をした後で、テレビを見ます。',exen:'After doing homework, I watch TV.',ex2:'昼ご飯を食べた後で、散歩します。',ex2en:'After eating lunch, I take a walk.',note:'Use た-form + 後で. Noun + の + 後で'},
+  {id:'g_nagara',p:'～ながら',title:'～ながら — while doing',when:'Do two actions simultaneously. The ながら action is secondary.',pattern:'[Verb stem] + ながら + [Main action]',formal:'both',ex:'音楽を聴きながら勉強します。',exen:'I study while listening to music.',ex2:'歩きながら電話をします。',ex2en:'I talk on the phone while walking.',note:'The main action (after ながら) is the focus. Same subject must do both actions'},
+  {id:'g_node',p:'～ので',title:'～ので — because (soft)',when:'Give a reason more politely/softly than から.',pattern:'[Plain form] + ので',formal:'both',ex:'疲れたので、休みます。',exen:'Since I\'m tired, I\'ll rest.',ex2:'雨が降っているので、家にいます。',ex2en:'Since it\'s raining, I\'ll stay home.',note:'ので (polite reason) vs から (direct reason). ので sounds more objective'},
+  {id:'g_mashouka',p:'～ましょうか',title:'～ましょうか — shall I / shall we?',when:'Offer to do something or suggest doing together.',pattern:'[Verb stem] + ましょうか',formal:'polite',ex:'荷物を持ちましょうか？',exen:'Shall I carry your luggage?',ex2:'一緒に行きましょうか？',ex2en:'Shall we go together?',note:'ましょうか (offer/suggestion) vs ませんか (invitation, slightly more polite)'},
+  {id:'g_hazu',p:'はずです',title:'～はずです — supposed to / expected to',when:'Express expectation based on reasoning.',pattern:'[Plain form] + はずです',formal:'both',ex:'彼はもう来るはずです。',exen:'He should be coming by now.',ex2:'この薬で治るはずです。',ex2en:'This medicine should cure it.',note:'はず = expectation from logic. でしょう = guess/probability'},
+  {id:'g_deshou',p:'でしょう / だろう',title:'でしょう — probably / I think',when:'Express probability or assumption.',pattern:'[Plain form] + でしょう',formal:'both',ex:'明日は雨でしょう。',exen:'It will probably rain tomorrow.',ex2:'彼女は忙しいでしょう。',ex2en:'She is probably busy.',note:'でしょう (polite guess) vs だろう (casual guess). Both express probability'},
+];
+
+// ═══════════════════════════════════════════════════════
+// SRS & STATE
+// ═══════════════════════════════════════════════════════
+const RESET_HOUR = 4;
+
+function getState(){
+  return JSON.parse(localStorage.getItem('nihongo_v2')||JSON.stringify({
+    cards:{},dailyLimit:10,streak:0,lastStudy:null,
+    todayLearned:[],todayDate:null,n4Unlocked:false
+  }));
+}
+function saveState(s){localStorage.setItem('nihongo_v2',JSON.stringify(s));}
+
+function getStudyDate(){
+  const n=new Date();
+  if(n.getHours()<RESET_HOUR) n.setDate(n.getDate()-1);
+  return n.toISOString().split('T')[0];
+}
+
+function checkReset(){
+  const s=getState(), today=getStudyDate();
+  if(s.todayDate!==today){s.todayDate=today;s.todayLearned=[];saveState(s);}
+  return s;
+}
+
+function sm2(card,rating){
+  let{interval,easeFactor,lapses}=card;
+  if(rating===0){interval=1;lapses++;easeFactor=Math.max(1.3,easeFactor-.2);}
+  else if(rating===1){interval=Math.max(1,Math.round(interval*1.2));easeFactor=Math.max(1.3,easeFactor-.15);}
+  else if(rating===2){interval=interval===0?3:Math.round(interval*easeFactor);}
+  else{interval=interval===0?7:Math.round(interval*easeFactor*1.3);easeFactor=Math.min(3,easeFactor+.1);}
+  const next=new Date();
+  next.setDate(next.getDate()+interval);
+  return{...card,interval,easeFactor,lapses,nextReview:next.toISOString().split('T')[0],mature:interval>=21,reviews:(card.reviews||0)+1};
+}
+
+function getCardState(id){
+  const s=getState();
+  return s.cards[id]||{id,interval:0,easeFactor:2.5,nextReview:null,reviews:0,lapses:0,mature:false};
+}
+
+function getDue(){
+  const today=getStudyDate();
+  return VOCAB.filter(w=>{const c=getCardState(w.id);return c.nextReview&&c.nextReview<=today;});
+}
+
+function getNew(limit){
+  const s=getState();
+  const learned=new Set(s.todayLearned);
+  return VOCAB.filter(w=>!getCardState(w.id).nextReview&&!learned.has(w.id)).slice(0,limit);
+}
+
+// ═══════════════════════════════════════════════════════
+// SESSION
+// ═══════════════════════════════════════════════════════
+let session={queue:[],index:0,flipped:false,wrapUp:false,learned:[]};
+
+function startStudy(){
+  const s=checkReset();
+  const newSlots=Math.max(0,(s.dailyLimit||10)-s.todayLearned.length);
+  const due=getDue(), newCards=getNew(newSlots);
+  const queue=[...due,...newCards];
+  if(!queue.length){showToast('No cards due! 🎉 Check back later');return;}
+  session={queue,index:0,flipped:false,wrapUp:false,learned:[]};
+  showScreen('flashcard');
+  renderCard();
+}
+
+function startWrapUp(){
+  const s=getState();
+  const words=VOCAB.filter(w=>s.todayLearned.includes(w.id));
+  if(!words.length){showToast('Nothing learned today yet!');return;}
+  session={queue:[...words],index:0,flipped:false,wrapUp:true,learned:[]};
+  showScreen('flashcard');
+  renderCard();
+}
+
+function renderCard(){
+  const wrap=document.getElementById('fc-wrap');
+  const rating=document.getElementById('fc-rating');
+  const grind=document.getElementById('grind-bar');
+  const {queue,index,wrapUp}=session;
+  if(index>=queue.length){showDone();return;}
+  const word=queue[index];
+  const isNew=!getCardState(word.id).nextReview;
+  document.getElementById('fc-prog-text').textContent=`${index+1} of ${queue.length}`;
+  document.getElementById('fc-mode').textContent=wrapUp?'Wrap-up':isNew?'New':'Review';
+  document.getElementById('fc-pfill').style.width=`${(index/queue.length)*100}%`;
+  grind.style.display=wrapUp?'none':'flex';
+  rating.style.display='none';
+  session.flipped=false;
+  wrap.innerHTML=`
+    <div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-face">
+        <div class="fc-hint">${word.level||'N5'} · ${word.pos}</div>
+        <div class="fc-word">${word.w}</div>
+        <div class="fc-reading">${word.r}</div>
+        <div class="fc-pos-tag">${word.cat}</div>
+        <div class="fc-tap">👆 tap to reveal</div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-hint">${word.level||'N5'} · ${word.pos}</div>
+        <div class="fc-meaning">${word.m}</div>
+        <div class="fc-example">
+          <div class="fc-ex-jp">${word.ex}</div>
+          <div class="fc-ex-en">${word.exen}</div>
+        </div>
+        <div class="fc-tip">💡 ${word.tip}</div>
+      </div>
+    </div>`;
+}
+
+function flipCard(){
+  if(session.flipped)return;
+  session.flipped=true;
+  document.getElementById('fc-card')?.classList.add('flipped');
+  document.getElementById('fc-rating').style.display='grid';
+}
+
+function rateCard(rating){
+  const word=session.queue[session.index];
+  const card=sm2(getCardState(word.id),rating);
+  card.learnedOn=getStudyDate();
+  const s=getState();
+  s.cards[word.id]=card;
+  if(!s.todayLearned.includes(word.id)&&!getCardState(word.id).nextReview){
+    s.todayLearned.push(word.id);
+  }
+  const today=getStudyDate();
+  if(s.lastStudy!==today){
+    const yest=new Date();yest.setDate(yest.getDate()-1);
+    s.streak=s.lastStudy===yest.toISOString().split('T')[0]?(s.streak||0)+1:1;
+    s.lastStudy=today;
+  }
+  saveState(s);
+  session.learned.push(word.id);
+  session.index++;
+  renderCard();
+}
+
+function showDone(){
+  const s=getState();
+  document.getElementById('fc-rating').style.display='none';
+  document.getElementById('grind-bar').style.display='none';
+  document.getElementById('fc-wrap').innerHTML=`
+    <div class="done-wrap">
+      <div class="done-icon">${session.wrapUp?'🏆':'✅'}</div>
+      <div class="done-title">${session.wrapUp?'Wrap-up Complete!':'Session Complete!'}</div>
+      <div class="done-sub">${session.wrapUp?'You reviewed all of today\'s new words!':'Great work on today\'s session.'}</div>
+      <div class="done-stats">
+        <div class="done-stat"><div class="done-stat-n">${session.learned.length}</div><div class="done-stat-l">Reviewed</div></div>
+        <div class="done-stat"><div class="done-stat-n">${s.todayLearned.length}</div><div class="done-stat-l">Today</div></div>
+        <div class="done-stat"><div class="done-stat-n">${s.streak||0}🔥</div><div class="done-stat-l">Streak</div></div>
+      </div>
+      <button class="primary-btn" onclick="exitStudy()" style="margin-bottom:10px">Back to Home</button>
+      ${!session.wrapUp?`<button class="secondary-btn" onclick="startWrapUp()">🔁 Wrap-up Session</button>`:''}
+    </div>`;
+}
+
+function exitStudy(){showScreen('home');}
+
+// ═══════════════════════════════════════════════════════
+// LIBRARY
+// ═══════════════════════════════════════════════════════
+let libTab='vocab';
+const catFilters={vocab:'all',kanji:'all',grammar:'all'};
+
+function setLibTab(tab){
+  libTab=tab;
+  document.querySelectorAll('.lib-tab').forEach((el,i)=>{
+    el.classList.toggle('active',['vocab','kanji','grammar'][i]===tab);
+  });
+  document.getElementById('lib-search').value='';
+  renderLibrary();
+}
+
+function renderLibrary(){
+  const q=(document.getElementById('lib-search')?.value||'').toLowerCase();
+  const filtersEl=document.getElementById('lib-filters');
+  const listEl=document.getElementById('lib-list');
+  if(libTab==='vocab') renderVocab(q,filtersEl,listEl);
+  else if(libTab==='kanji') renderKanjiLib(q,filtersEl,listEl);
+  else renderGrammar(q,filtersEl,listEl);
+}
+
+function renderVocab(q,filtersEl,listEl){
+  const cats=[...new Set(VOCAB.map(v=>v.cat))];
+  const cur=catFilters.vocab;
+  filtersEl.innerHTML='<div class="filter-chip '+(cur==='all'?'active':'')+'" onclick="setCatFilter(\'vocab\',\'all\')">All</div>'+
+    cats.map(c=>`<div class="filter-chip ${cur===c?'active':''}" onclick="setCatFilter('vocab','${c}')">${c}</div>`).join('');
+  let words=VOCAB.filter(w=>cur==='all'||w.cat===cur);
+  if(q) words=words.filter(w=>w.w.includes(q)||w.r.includes(q)||w.m.toLowerCase().includes(q)||w.cat.includes(q));
+  document.getElementById('lib-count-label').textContent=`${words.length} words`;
+  if(!words.length){listEl.innerHTML='<div class="lib-empty"><div class="lib-empty-icon">🔍</div><div class="lib-empty-text">No results found</div></div>';return;}
+  listEl.innerHTML=words.map(w=>`
+    <div class="lib-card">
+      <div class="lib-card-top">
+        <div><div class="lib-word">${w.w}</div><div class="lib-reading">${w.r}</div></div>
+        <div class="lib-badges"><span class="badge badge-n5">N5</span><span class="badge badge-pos">${w.pos}</span><span class="badge badge-cat">${w.cat}</span></div>
+      </div>
+      <div class="lib-meaning">${w.m}</div>
+      <div class="lib-example"><div class="lib-ex-jp">${w.ex}</div><div class="lib-ex-en">${w.exen}</div></div>
+      <div class="lib-tip">💡 ${w.tip}</div>
+    </div>`).join('');
+}
+
+function renderKanjiLib(q,filtersEl,listEl){
+  filtersEl.innerHTML='';
+  let kanji=KANJI;
+  if(q) kanji=kanji.filter(k=>k.k.includes(q)||k.m.toLowerCase().includes(q)||k.on.toLowerCase().includes(q)||k.kun.includes(q));
+  document.getElementById('lib-count-label').textContent=`${kanji.length} kanji`;
+  if(!kanji.length){listEl.innerHTML='<div class="lib-empty"><div class="lib-empty-icon">🔍</div><div class="lib-empty-text">No results found</div></div>';return;}
+  listEl.innerHTML=kanji.map(k=>`
+    <div class="lib-card">
+      <div class="lib-card-top">
+        <div><div class="kanji-big">${k.k}</div><div class="lib-reading">${k.m}</div></div>
+        <div class="lib-badges"><span class="badge badge-n5">N5</span><span class="badge badge-pos">${k.stroke} strokes</span></div>
+      </div>
+      <div class="readings-row">
+        <div class="reading-group"><div class="reading-label">On-yomi</div><div class="reading-val">${k.on}</div></div>
+        <div class="reading-group"><div class="reading-label">Kun-yomi</div><div class="reading-val">${k.kun}</div></div>
+      </div>
+      <div class="lib-example"><div class="lib-ex-jp">${k.ex}</div></div>
+      <div class="lib-tip">💡 ${k.tip}</div>
+    </div>`).join('');
+}
+
+function renderGrammar(q,filtersEl,listEl){
+  filtersEl.innerHTML='';
+  let grams=GRAMMAR;
+  if(q) grams=grams.filter(g=>g.title.toLowerCase().includes(q)||g.p.includes(q)||g.when.toLowerCase().includes(q));
+  document.getElementById('lib-count-label').textContent=`${grams.length} grammar points`;
+  if(!grams.length){listEl.innerHTML='<div class="lib-empty"><div class="lib-empty-icon">🔍</div><div class="lib-empty-text">No results found</div></div>';return;}
+  listEl.innerHTML=grams.map(g=>`
+    <div class="lib-card">
+      <div style="margin-bottom:10px">
+        <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px">${g.title}</div>
+        <div class="grammar-formal ${g.formal==='polite'?'formal-polite':g.formal==='casual'?'formal-casual':'formal-both'}">${g.formal}</div>
+      </div>
+      <div class="grammar-pattern">${g.pattern}</div>
+      <div class="grammar-when">${g.when}</div>
+      <div class="lib-example"><div class="lib-ex-jp">${g.ex}</div><div class="lib-ex-en">${g.exen}</div></div>
+      <div class="lib-example"><div class="lib-ex-jp">${g.ex2}</div><div class="lib-ex-en">${g.ex2en}</div></div>
+      ${g.note?`<div class="lib-tip">📌 ${g.note}</div>`:''}
+    </div>`).join('');
+}
+
+function setCatFilter(tab,cat){
+  catFilters[tab]=cat;
+  renderLibrary();
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+function updateDashboard(){
+  const s=checkReset();
+  const newSlots=Math.max(0,(s.dailyLimit||10)-s.todayLearned.length);
+  const due=getDue(), newCards=getNew(newSlots);
+  const total=due.length+newCards.length;
+  const learned=Object.keys(s.cards).filter(id=>s.cards[id].nextReview).length;
+  const mature=Object.keys(s.cards).filter(id=>s.cards[id].mature).length;
+  const n5Mastery=Math.round((mature/VOCAB.length)*100);
+  document.getElementById('streak-num').textContent=s.streak||0;
+  document.getElementById('due-count').textContent=total;
+  document.getElementById('new-label').textContent=`+${newCards.length} new`;
+  document.getElementById('learned-count').textContent=learned;
+  document.getElementById('mature-label').textContent=`${mature} mature`;
+  document.getElementById('daily-label').textContent=`${s.todayLearned.length} / ${s.dailyLimit||10}`;
+  document.getElementById('daily-fill').style.width=`${Math.min(100,(s.todayLearned.length/(s.dailyLimit||10))*100)}%`;
+  document.getElementById('n5-label').textContent=`${n5Mastery}%`;
+  document.getElementById('n5-fill').style.width=`${n5Mastery}%`;
+  document.getElementById('fc-count').textContent=total;
+  const studyBtn=document.getElementById('study-btn');
+  studyBtn.textContent=total>0?`Study Now (${total} cards) →`:'All caught up! 🎉';
+  studyBtn.disabled=total===0;
+  const wb=document.getElementById('wrapup-badge');
+  wb.style.display=s.todayLearned.length>0?'flex':'none';
+  document.getElementById('wrapup-count').textContent=s.todayLearned.length;
+  // Greeting
+  const h=new Date().getHours();
+  const greet=h<5?'こんばんは':h<12?'おはようございます':h<18?'こんにちは':'こんばんは';
+  document.getElementById('greeting').textContent=greet;
+  document.getElementById('home-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('level-badge').textContent=s.n4Unlocked?'N5+N4':'N5';
+  if(n5Mastery>=80&&!s.n4Unlocked){s.n4Unlocked=true;saveState(s);showToast('🎉 N4 Unlocked! おめでとう！');}
+}
+
+function updateSettings(){
+  const s=getState();
+  document.getElementById('limit-input').value=s.dailyLimit||10;
+  const learned=Object.keys(s.cards).filter(id=>s.cards[id].nextReview).length;
+  document.getElementById('s-learned').textContent=learned;
+  document.getElementById('s-level').textContent=s.n4Unlocked?'N5+N4':'N5';
+  document.getElementById('s-deck').textContent=VOCAB.length;
+}
+
+// ═══════════════════════════════════════════════════════
+// NAV & SCREENS
+// ═══════════════════════════════════════════════════════
+const SCREENS={home:'home-screen',flashcard:'flashcard-screen',library:'library-screen',settings:'settings-screen'};
+const NAV_IDS=['nav-home','nav-study','nav-library','nav-settings'];
+const NAV_SCREENS=['home','flashcard-study','library','settings'];
+
+function showScreen(name){
+  if(name==='flashcard-study'){startStudy();return;}
+  Object.values(SCREENS).forEach(id=>document.getElementById(id)?.classList.remove('active'));
+  document.getElementById(SCREENS[name])?.classList.add('active');
+  NAV_IDS.forEach((id,i)=>document.getElementById(id)?.classList.toggle('active',NAV_SCREENS[i]===name));
+  if(name==='home') updateDashboard();
+  if(name==='settings') updateSettings();
+  if(name==='library') renderLibrary();
+}
+
+// ═══════════════════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════════════════
+function adjLimit(delta){
+  const inp=document.getElementById('limit-input');
+  inp.value=Math.min(100,Math.max(1,parseInt(inp.value)+delta));
+  saveLimit(inp.value);
+}
+function saveLimit(v){
+  const s=getState();s.dailyLimit=Math.min(100,Math.max(1,parseInt(v)||10));saveState(s);updateDashboard();
+}
+
+// ═══════════════════════════════════════════════════════
+// MODALS & RESET
+// ═══════════════════════════════════════════════════════
+function showModal(type){
+  const overlay=document.getElementById('modal-overlay');
+  if(type==='today'){
+    document.getElementById('modal-title').textContent='Reset Today?';
+    document.getElementById('modal-body').textContent="Clears today's session. Your past SRS history stays intact.";
+    document.getElementById('modal-btns').innerHTML='<button class="danger-btn" onclick="resetToday()">🔄 Reset Today</button><button class="secondary-btn" onclick="closeModal()">Cancel</button>';
+  } else {
+    document.getElementById('modal-title').textContent='☢️ Reset Everything?';
+    document.getElementById('modal-body').textContent='Permanently erases ALL progress, SRS data, and streak. Cannot be undone.';
+    document.getElementById('modal-btns').innerHTML='<button class="danger-btn" onclick="resetAll()">Yes, erase everything</button><button class="secondary-btn" onclick="closeModal()">Cancel</button>';
+  }
+  overlay.classList.remove('hidden');
+}
+
+function showGrindModal(){
+  document.getElementById('modal-title').textContent='Grind Mode';
+  document.getElementById('modal-body').textContent="Reset today's session to drill the same words again. SRS history is preserved.";
+  document.getElementById('modal-btns').innerHTML='<button class="primary-btn" onclick="resetToday()">🔄 Restart Today</button><button class="secondary-btn" onclick="closeModal()">Cancel</button>';
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function closeModal(){document.getElementById('modal-overlay').classList.add('hidden');}
+
+function resetToday(){
+  const s=getState();s.todayLearned=[];s.todayDate=null;saveState(s);
+  closeModal();showToast("Today's session reset 🔄");updateDashboard();
+}
+
+function resetAll(){
+  localStorage.removeItem('nihongo_v2');
+  closeModal();showToast('All progress reset ☢️');updateDashboard();updateSettings();
+}
+
+// ═══════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+checkReset();
+updateDashboard();
+showScreen('home');
+</script>
+</body>
+</html>
